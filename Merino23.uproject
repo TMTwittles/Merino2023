@@ -10,8 +10,15 @@
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
 				"Engine",
-				"CoreUObject"
+				"CoreUObject",
+				"Blutility",
+				"AIModule"
 			]
+		},
+		{
+			"Name": "Merino23Editor",
+			"Type": "Runtime",
+			"LoadingPhase": "PostEngineInit"
 		}
 	],
 	"Plugins": [

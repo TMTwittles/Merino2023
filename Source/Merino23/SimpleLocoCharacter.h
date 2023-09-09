@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Engine/DataTable.h"
 #include "SimpleLocoCharacter.generated.h"
+
+class FAttackHandler;
+class UDataTable;
 
 UCLASS()
 class MERINO23_API ASimpleLocoCharacter : public ACharacter
@@ -19,7 +23,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -27,8 +31,16 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+	void Attack();
 	void CheckMovementInput();
 	void DrawInputDebugHelpers() const;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+	UDataTable* CharacterAttackCombos;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true,RowType="CharacterAttack"))
+	FDataTableRowHandle CharacterAttack;
+	
+	FAttackHandler* CharacterAttackHandler;
+	
 	FVector InputDirection;
 };

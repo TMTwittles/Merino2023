@@ -1,7 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-
 using UnrealBuildTool;
-using System.Collections.Generic;
 
 public class Merino23Target : TargetRules
 {
@@ -11,5 +9,13 @@ public class Merino23Target : TargetRules
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_1;
 		ExtraModuleNames.Add("Merino23");
+		if (Type == TargetType.Editor)
+		{
+			ExtraModuleNames.AddRange(
+				new string[]
+				{
+					"Merino23Editor"
+				});
+		}
 	}
 }

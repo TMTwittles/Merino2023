@@ -14,7 +14,13 @@ class MERINO23_API UMerinoMathStatics : public UObject
 {
 	GENERATED_BODY()
 
-	public:
+public:
+	UFUNCTION(BlueprintCallable)
 	static float GetUnsignedAngleBetweenTwoVectors(FVector From, FVector To);
+	UFUNCTION(BlueprintCallable)
 	static float GetSignedAngleBetweenTwoVectorsRelativeToAxis(FVector From, FVector To, FVector Axis);
+	static float GetYawFromQuat(FQuat Quat);
+	static float GetPitchFromQuat(FQuat Quat);
+	static FQuat BuildQuatEuler(float Yaw, float Pitch, float Roll);
+	static FVector CalculateCentroid(FVector P1, FVector P2, FVector P3);
 };

@@ -13,5 +13,4 @@ UCLASS()
 class MERINO23_API AMerino23GameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
 };

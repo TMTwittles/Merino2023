@@ -1,25 +1,31 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "SimpleLocoCharacter.h"
 
+#include "FAttackCombo.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+// Input constants
 static const FName NAME_MoveX("MoveX");
 static const FName NAME_MoveY("MoveY");
 static const FName NAME_CamX("CamX");
+static const FName NAME_Attack("Attack");
+
+// Attack combos constants
+static const FName NAME_BasicCharacterAttack("BasicCharacterAttack");
 
 // Sets default values
 ASimpleLocoCharacter::ASimpleLocoCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
+	//CharacterAttackHandler = new FAttackHandler(GetMesh()->GetAnimInstance(), CharacterAttackCombos->FindRow<FAttackCombo*>(NAME_BasicCharacterAttack, nullptr));
 }
 
 // Called when the game starts or when spawned
 void ASimpleLocoCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -27,7 +33,7 @@ void ASimpleLocoCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	CheckMovementInput();
-	DrawInputDebugHelpers();
+	//DrawInputDebugHelpers();
 }
 
 // Called to bind functionality to input
@@ -39,6 +45,11 @@ void ASimpleLocoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis(NAME_CamX);
 }
 
+void ASimpleLocoCharacter::Attack()
+{
+	
+}
+
 void ASimpleLocoCharacter::CheckMovementInput()
 {
 	UE_LOG(LogTemp, Log, TEXT("Move x input: %f"), GetInputAxisValue(NAME_MoveX));
@@ -48,8 +59,9 @@ void ASimpleLocoCharacter::CheckMovementInput()
 	float InputY = GetInputAxisValue(NAME_MoveY);
 	float InputX = GetInputAxisValue(NAME_MoveX);
 	InputDirection = FVector(InputY, InputX, 0.0f);
-	
-	UE_LOG(LogTemp, Log, TEXT("Input direction x: %f y: %f z: %f"), InputDirection.X, InputDirection.Y, InputDirection.Z);
+
+	UE_LOG(LogTemp, Log, TEXT("Input direction x: %f y: %f z: %f"), InputDirection.X, InputDirection.Y,
+	       InputDirection.Z);
 }
 
 void ASimpleLocoCharacter::DrawInputDebugHelpers() const
@@ -60,15 +72,14 @@ void ASimpleLocoCharacter::DrawInputDebugHelpers() const
 	FVector InputDirectionNormalized = InputDirection;
 	//InputDirectionNormalized.Normalize();
 	DrawDebugLine(GetWorld(),
-		actorLocation,
-		actorLocation + InputDirectionNormalized * LineSize,
-		FColor(0, 255, 0),
-		false);
-	
-	DrawDebugSphere(GetWorld(),
-		actorLocation + InputDirectionNormalized * LineSize,
-		CircleRadius,
-		10,
-		FColor(0, 255, 0));
-}
+	              actorLocation,
+	              actorLocation + InputDirectionNormalized * LineSize,
+	              FColor(0, 255, 0),
+	              false);
 
+	DrawDebugSphere(GetWorld(),
+	                actorLocation + InputDirectionNormalized * LineSize,
+	                CircleRadius,
+	                10,
+	                FColor(0, 255, 0));
+}
