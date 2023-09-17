@@ -3,7 +3,6 @@
 
 #include "MerinoLogStatics.h"
 #include "MerinoMathStatics.h"
-#include "SAdvancedTransformInputBox.h"
 #include "SimpleLocoPawnCamera.h"
 #include "Kismet/KismetMathLibrary.h"
 
