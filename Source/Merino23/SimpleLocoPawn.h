@@ -12,7 +12,6 @@ class ASimpleLocoPawnCamera;
 class UCameraMovementComponent;
 class UCameraComponent;
 class UCapsuleComponent;
-class FAttackHandler;
 class USkeletalMeshComponent;
 
 UCLASS()
@@ -44,7 +43,6 @@ public:
 	
 
 private:
-	FAttackHandler* AttackHandler;
 	ASimpleLocoPawnCamera* SpawnedCamera;
 
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"));
@@ -56,9 +54,6 @@ private:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess="true"))
 	USkeletalMeshComponent* Mesh;
 	
-	//UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true,RowType="AttackCombo"))
-	//FDataTableRowHandle* CharacterAttack;
-
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess="true"))
 	UAnimMontage* AttackAnim;
 
