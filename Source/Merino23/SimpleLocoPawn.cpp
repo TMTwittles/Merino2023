@@ -9,7 +9,6 @@
 #include "SimpleLocoPawnCamera.h"
 #include "SimpleLocoPawnMovementComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "EntitySystem/MovieSceneEntitySystemRunner.h"
 
 static const FName NAME_MoveX("MoveX");
 static const FName NAME_MoveY("MoveY");
