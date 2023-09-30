@@ -1,11 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "SimpleLocoPawn.h"
-
-#include "GameFramework/PawnMovementComponent.h"
-#include "AttackHandler.h"
-#include "FAttackCombo.h"
 #include "MerinoMathStatics.h"
-#include "SimpleLocoCharacter.h"
 #include "SimpleLocoPawnCamera.h"
 #include "SimpleLocoPawnMovementComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -22,13 +17,12 @@ ASimpleLocoPawn::ASimpleLocoPawn()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
 	Movement = CreateDefaultSubobject<USimpleLocoPawnMovementComponent>("Movement");
 	CapsuleCollider = CreateDefaultSubobject<UCapsuleComponent>("CapsuleCollider");
 	SetRootComponent(CapsuleCollider);
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>("PawnMesh");
 	Mesh->SetupAttachment(GetRootComponent());
-	//Mesh->SetupAttachment(GetRootComponent());
-	
 }
 
 // Called when the game starts or when spawned
