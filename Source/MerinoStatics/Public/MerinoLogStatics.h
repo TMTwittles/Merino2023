@@ -1,16 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
 #include "MerinoLogStatics.generated.h"
 
-/**
- * 
- */
 UCLASS()
-class MERINO23_API UMerinoLogStatics : public UObject
+class MERINOSTATICS_API UMerinoLogStatics : public UObject
 {
 	GENERATED_BODY()
 

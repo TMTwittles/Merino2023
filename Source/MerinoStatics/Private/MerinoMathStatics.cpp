@@ -1,6 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "MerinoMathStatics.h"
 
 float UMerinoMathStatics::GetUnsignedAngleBetweenTwoVectors(FVector From, FVector To)

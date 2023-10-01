@@ -13,6 +13,11 @@
 				"CoreUObject",
 				"AIModule"
 			]
+		},
+		{
+			"Name": "MerinoStatics",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
