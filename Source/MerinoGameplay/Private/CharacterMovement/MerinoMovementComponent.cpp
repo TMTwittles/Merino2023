@@ -1,12 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-#include "SimpleLocoPawnMovementComponent.h"
-
+#include "CharacterMovement/MerinoMovementComponent.h"
 #include "MerinoLogStatics.h"
 #include "MerinoMathStatics.h"
-#include "SimpleLocoPawnCamera.h"
-#include "Kismet/KismetMathLibrary.h"
+#include "DynamicMovingCamera.h"
 
-void USimpleLocoPawnMovementComponent::BeginPlay()
+void UMerinoMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	SetUpdatedComponent(GetOwner()->GetRootComponent());
@@ -15,7 +13,7 @@ void USimpleLocoPawnMovementComponent::BeginPlay()
 	CurrentRotationAmount = 0.0f;
 }
 
-void USimpleLocoPawnMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType,
+void UMerinoMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                                      FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -40,22 +38,22 @@ void USimpleLocoPawnMovementComponent::TickComponent(float DeltaTime, ELevelTick
 	ConsumeInputVector();
 }
 
-void USimpleLocoPawnMovementComponent::AddInputVector(FVector WorldVector, bool bForce)
+void UMerinoMovementComponent::AddInputVector(FVector WorldVector, bool bForce)
 {
 	Super::AddInputVector(WorldVector, bForce);
 }
 
-FVector USimpleLocoPawnMovementComponent::ConsumeInputVector()
+FVector UMerinoMovementComponent::ConsumeInputVector()
 {
 	return Super::ConsumeInputVector();
 }
 
-void USimpleLocoPawnMovementComponent::SetCamera(ASimpleLocoPawnCamera* _PawnCamera)
+void UMerinoMovementComponent::SetCamera(ADynamicMovingCamera* _PawnCamera)
 {
 	PawnCamera = _PawnCamera;
 }
 
-const bool USimpleLocoPawnMovementComponent::CharacterFalling()
+const bool UMerinoMovementComponent::CharacterFalling()
 {
 	FHitResult HitResult;
 	FVector LineTraceStart = GetOwner()->GetActorLocation();
@@ -64,7 +62,7 @@ const bool USimpleLocoPawnMovementComponent::CharacterFalling()
 	return bHit == false;
 }
 
-void USimpleLocoPawnMovementComponent::TickRotateToCamera(float DeltaTime)
+void UMerinoMovementComponent::TickRotateToCamera(float DeltaTime)
 {
 	if (PawnCamera == nullptr)
 	{
@@ -97,7 +95,7 @@ void USimpleLocoPawnMovementComponent::TickRotateToCamera(float DeltaTime)
 	}
 }
 
-void USimpleLocoPawnMovementComponent::TickRotateToInput(float DeltaTime)
+void UMerinoMovementComponent::TickRotateToInput(float DeltaTime)
 {
 	if (CurrentInputVector != FVector::Zero())
 	{

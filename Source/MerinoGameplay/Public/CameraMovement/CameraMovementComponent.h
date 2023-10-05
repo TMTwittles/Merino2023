@@ -10,7 +10,7 @@
 class UCameraComponent;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class MERINO23_API UCameraMovementComponent : public UActorComponent
+class MERINOGAMEPLAY_API UCameraMovementComponent : public UActorComponent
 {
 	GENERATED_BODY()
 

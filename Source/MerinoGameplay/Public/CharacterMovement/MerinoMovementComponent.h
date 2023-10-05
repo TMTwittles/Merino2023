@@ -4,15 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PawnMovementComponent.h"
-#include "SimpleLocoPawnMovementComponent.generated.h"
+#include "MerinoMovementComponent.generated.h"
 
-class ASimpleLocoPawnCamera;
+class ADynamicMovingCamera;
 /**
  * 
  */
 UCLASS(ClassGroup=Movement, meta=(BlueprintSpawnableComponent))
-class MERINO23_API USimpleLocoPawnMovementComponent : public UPawnMovementComponent
+class MERINOGAMEPLAY_API UMerinoMovementComponent : public UPawnMovementComponent
 {
+	GENERATED_BODY()
+	
 public:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
@@ -20,7 +22,7 @@ public:
 
 	virtual void AddInputVector(FVector WorldVector, bool bForce) override;
 	virtual FVector ConsumeInputVector() override;
-	void SetCamera(ASimpleLocoPawnCamera* _PawnCamera);
+	void SetCamera(ADynamicMovingCamera* _PawnCamera);
 
 
 public:
@@ -29,7 +31,7 @@ public:
 	
 private:
 
-	ASimpleLocoPawnCamera* PawnCamera; 
+	ADynamicMovingCamera* PawnCamera; 
 	
 	const float InputDiffDegreesRequiresRecalculationThreshold = 30.0f;
 	const float MaxRotationAmount = 180.0f;
@@ -59,6 +61,4 @@ private:
 	FQuat UpdatedActorRotation;
 	FVector CurrentInputVector;
 	FVector PreviousInputVector;
-
-	GENERATED_BODY()
 };

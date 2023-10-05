@@ -1,22 +1,21 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "SimpleLocoPawnCamera.generated.h"
+#include "DynamicMovingCamera.generated.h"
 
 class UCameraComponent;
 class UCameraMovementComponent;
 
 UCLASS()
-class MERINO23_API ASimpleLocoPawnCamera : public AActor
+class MERINO23_API ADynamicMovingCamera : public AActor
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this actor's properties
-	ASimpleLocoPawnCamera();
+	ADynamicMovingCamera();
 
 protected:
 	// Called when the game starts or when spawned
@@ -25,7 +24,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void ConfigureSimpleLocoPawnCamera(AActor* ActorToFollow);
+	void Configure(AActor* ActorToFollow);
 	void AddYawPitch(float YawInc, float PitchInc);
 	float GetYaw();
 	float GetPitch();

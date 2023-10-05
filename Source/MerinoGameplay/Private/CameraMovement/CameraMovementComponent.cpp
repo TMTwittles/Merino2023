@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-#include "CameraMovementComponent.h"
-
+#include "CameraMovement/CameraMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -12,15 +11,11 @@ UCameraMovementComponent::UCameraMovementComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-
 // Called when the game starts
 void UCameraMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 }
-
 
 // Called every frame
 void UCameraMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

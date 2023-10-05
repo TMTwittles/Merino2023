@@ -1,15 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "SimpleLocoPawnCamera.h"
-#include "CameraMovementComponent.h"
+#include "DynamicMovingCamera.h"
+#include "CameraMovement/CameraMovementComponent.h"
 #include "Camera/CameraComponent.h"
 
-static const FName NAME_CamX("CamX");
-static const FName NAME_CamY("CamY");
-
 // Sets default values
-ASimpleLocoPawnCamera::ASimpleLocoPawnCamera()
+ADynamicMovingCamera::ADynamicMovingCamera()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -18,34 +13,34 @@ ASimpleLocoPawnCamera::ASimpleLocoPawnCamera()
 }
 
 // Called when the game starts or when spawned
-void ASimpleLocoPawnCamera::BeginPlay()
+void ADynamicMovingCamera::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
 // Called every frame
-void ASimpleLocoPawnCamera::Tick(float DeltaTime)
+void ADynamicMovingCamera::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
-void ASimpleLocoPawnCamera::ConfigureSimpleLocoPawnCamera(AActor* ActorToFollow)
+void ADynamicMovingCamera::Configure(AActor* ActorToFollow)
 {
 	CameraMovementComponent->ConfigureCameraPositionRotation(ActorToFollow, Camera);
 	GetWorld()->GetFirstPlayerController()->SetViewTarget(this);
 }
 
-void ASimpleLocoPawnCamera::AddYawPitch(float YawInc, float PitchInc)
+void ADynamicMovingCamera::AddYawPitch(float YawInc, float PitchInc)
 {
 	CameraMovementComponent->UpdateCameraYawPitch(YawInc, PitchInc);
 }
 
-float ASimpleLocoPawnCamera::GetYaw()
+float ADynamicMovingCamera::GetYaw()
 {
 	return CameraMovementComponent->Yaw;
 }
 
-float ASimpleLocoPawnCamera::GetPitch()
+float ADynamicMovingCamera::GetPitch()
 {
 	return CameraMovementComponent->Pitch;
 }

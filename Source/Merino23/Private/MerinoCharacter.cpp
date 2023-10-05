@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-#include "SimpleLocoPawn.h"
+#include "MerinoCharacter.h"
 #include "MerinoMathStatics.h"
-#include "SimpleLocoPawnCamera.h"
-#include "SimpleLocoPawnMovementComponent.h"
+#include "DynamicMovingCamera.h"
+#include "CharacterMovement/MerinoMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 
 static const FName NAME_MoveX("MoveX");
@@ -13,12 +13,12 @@ static const FName NAME_Attack("Attack");
 static const FName NAME_Attack01("Attack01");
 
 // Sets default values
-ASimpleLocoPawn::ASimpleLocoPawn()
+AMerinoCharacter::AMerinoCharacter()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
-	Movement = CreateDefaultSubobject<USimpleLocoPawnMovementComponent>("Movement");
+	Movement = CreateDefaultSubobject<UMerinoMovementComponent>("Movement");
 	CapsuleCollider = CreateDefaultSubobject<UCapsuleComponent>("CapsuleCollider");
 	SetRootComponent(CapsuleCollider);
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>("PawnMesh");
@@ -26,21 +26,21 @@ ASimpleLocoPawn::ASimpleLocoPawn()
 }
 
 // Called when the game starts or when spawned
-void ASimpleLocoPawn::BeginPlay()
+void AMerinoCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
 	// Spawn camera to follow loco pawn. 
-	SpawnedCamera = Cast<ASimpleLocoPawnCamera>(GetWorld()->SpawnActor(Camera));
+	SpawnedCamera = Cast<ADynamicMovingCamera>(GetWorld()->SpawnActor(Camera));
 	if (SpawnedCamera != nullptr)
 	{
-		SpawnedCamera->ConfigureSimpleLocoPawnCamera(this);
+		SpawnedCamera->Configure(this);
 		Movement->SetCamera(SpawnedCamera);
 	}
 }
 
 // Called every frame
-void ASimpleLocoPawn::Tick(float DeltaTime)
+void AMerinoCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	CheckMovementInput();
@@ -54,28 +54,28 @@ void ASimpleLocoPawn::Tick(float DeltaTime)
 }
 
 // Called to bind functionality to input
-void ASimpleLocoPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AMerinoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis(NAME_MoveX);
 	PlayerInputComponent->BindAxis(NAME_MoveY);
 	PlayerInputComponent->BindAxis(NAME_CamX);
 	PlayerInputComponent->BindAxis(NAME_CamY);
-	PlayerInputComponent->BindAction(NAME_Attack, IE_Pressed, this, &ASimpleLocoPawn::PlayAttack);
-	PlayerInputComponent->BindAction(NAME_Attack01, IE_Pressed, this, &ASimpleLocoPawn::PlayAttack01);
+	PlayerInputComponent->BindAction(NAME_Attack, IE_Pressed, this, &AMerinoCharacter::PlayAttack);
+	PlayerInputComponent->BindAction(NAME_Attack01, IE_Pressed, this, &AMerinoCharacter::PlayAttack01);
 }
 
-void ASimpleLocoPawn::PlayAttack()
+void AMerinoCharacter::PlayAttack()
 {
 	float played = Mesh->GetAnimInstance()->Montage_Play(AttackAnim);
 }
 
-void ASimpleLocoPawn::PlayAttack01()
+void AMerinoCharacter::PlayAttack01()
 {
 	float played = Mesh->GetAnimInstance()->Montage_Play(AttackAnim01);
 }
 
-void ASimpleLocoPawn::CheckMovementInput()
+void AMerinoCharacter::CheckMovementInput()
 {
 	/*UE_LOG(LogTemp, Log, TEXT("Move x input: %f"), GetInputAxisValue(NAME_MoveX));
 	UE_LOG(LogTemp, Log, TEXT("Move y input: %f"), GetInputAxisValue(NAME_MoveY));
@@ -99,7 +99,7 @@ void ASimpleLocoPawn::CheckMovementInput()
 }
 
 
-void ASimpleLocoPawn::DrawInputDebugHelpers() const
+void AMerinoCharacter::DrawInputDebugHelpers() const
 {
 	const float LineSize = 100.0f;
 	const float CircleRadius = 20.0f;
