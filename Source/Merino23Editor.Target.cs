@@ -11,13 +11,5 @@ public class Merino23EditorTarget : TargetRules
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_1;
 		ExtraModuleNames.Add("Merino23");
-		if (Type == TargetType.Editor)
-		{
-			ExtraModuleNames.AddRange(
-				new string[]
-				{
-					"Merino23Editor"
-				});
-		}
 	}
 }

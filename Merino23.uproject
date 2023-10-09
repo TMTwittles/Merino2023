@@ -11,14 +11,18 @@
 			"AdditionalDependencies": [
 				"Engine",
 				"CoreUObject",
-				"Blutility",
 				"AIModule"
 			]
 		},
 		{
-			"Name": "Merino23Editor",
+			"Name": "MerinoStatics",
 			"Type": "Runtime",
-			"LoadingPhase": "PostEngineInit"
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "MerinoGameplay",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
