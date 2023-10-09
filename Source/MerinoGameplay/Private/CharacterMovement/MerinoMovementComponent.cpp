@@ -24,9 +24,8 @@ void UMerinoMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	{
 		Velocity.Z -= Gravity;
 	}
-
-	TickRotateToCamera(DeltaTime);
-	//TickRotateToInput(DeltaTime);
+	
+	TickRotateToInput(DeltaTime);
 	UpdateComponentVelocity();
 	MoveUpdatedComponent(Velocity, UpdatedActorRotation, false);
 
@@ -34,7 +33,6 @@ void UMerinoMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	{
 		PreviousInputVector = CurrentInputVector;
 	}
-
 	ConsumeInputVector();
 }
 

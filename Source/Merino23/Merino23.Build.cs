@@ -7,7 +7,7 @@ public class Merino23 : ModuleRules
 	public Merino23(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-		PublicDependencyModuleNames.AddRange(new[] { "Core", "CoreUObject", "Engine", "InputCore", "NavigationSystem","Navmesh"});
+		PublicDependencyModuleNames.AddRange(new[] { "Core", "CoreUObject", "Engine", "InputCore", "NavigationSystem","Navmesh", "MerinoGameplay"});
 		PrivateDependencyModuleNames.AddRange(new[] { "MerinoStatics", "MerinoGameplay"});
 	}
 }
