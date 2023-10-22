@@ -5,13 +5,6 @@
 #include "CharacterMovement/MerinoMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 
-static const FName NAME_MoveX("MoveX");
-static const FName NAME_MoveY("MoveY");
-static const FName NAME_CamX("CamX");
-static const FName NAME_CamY("CamY");
-static const FName NAME_Attack("Attack");
-static const FName NAME_Attack01("Attack01");
-
 // Sets default values
 AMerinoCharacter::AMerinoCharacter()
 {
@@ -43,78 +36,37 @@ void AMerinoCharacter::BeginPlay()
 void AMerinoCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	CheckMovementInput();
-
-	if (SpawnedCamera != nullptr)
-	{
-		SpawnedCamera->AddYawPitch(GetInputAxisValue(NAME_CamX), GetInputAxisValue(NAME_CamY));
-	}
-	//DrawInputDebugHelpers();
-	AddMovementInput(InputDirection);
 }
 
 // Called to bind functionality to input
 void AMerinoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	PlayerInputComponent->BindAxis(NAME_MoveX);
-	PlayerInputComponent->BindAxis(NAME_MoveY);
-	PlayerInputComponent->BindAxis(NAME_CamX);
-	PlayerInputComponent->BindAxis(NAME_CamY);
-	PlayerInputComponent->BindAction(NAME_Attack, IE_Pressed, this, &AMerinoCharacter::PlayAttack);
-	PlayerInputComponent->BindAction(NAME_Attack01, IE_Pressed, this, &AMerinoCharacter::PlayAttack01);
 }
 
-void AMerinoCharacter::PlayAttack()
-{
-	float played = Mesh->GetAnimInstance()->Montage_Play(AttackAnim);
-}
 
-void AMerinoCharacter::PlayAttack01()
+void AMerinoCharacter::AddControllerMovementInput(float InputX, float InputY)
 {
-	float played = Mesh->GetAnimInstance()->Montage_Play(AttackAnim01);
-}
-
-void AMerinoCharacter::CheckMovementInput()
-{
-	/*UE_LOG(LogTemp, Log, TEXT("Move x input: %f"), GetInputAxisValue(NAME_MoveX));
-	UE_LOG(LogTemp, Log, TEXT("Move y input: %f"), GetInputAxisValue(NAME_MoveY));
-	UE_LOG(LogTemp, Log, TEXT("Cam z input: %f"), GetInputAxisValue(NAME_CamX));*/
-
-	float InputY = GetInputAxisValue(NAME_MoveY);
-	float InputX = GetInputAxisValue(NAME_MoveX);
-	FVector InputDirectionRaw = FVector(InputY, InputX, 0.0f);
+	FVector InputDirectionNoRotation = FVector(InputY, InputX, 0.0f);
 	if (SpawnedCamera != nullptr)
 	{
 		FQuat CameraRotation = SpawnedCamera->GetActorTransform().GetRotation();
 		FQuat CameraRotationYawOnly = UMerinoMathStatics::BuildQuatEuler(UMerinoMathStatics::GetYawFromQuat(CameraRotation), 0.0f, 0.0f);
-		FVector InputDirectionRotated = CameraRotationYawOnly * InputDirectionRaw;
-		InputDirection = InputDirectionRotated;
+		FVector InputDirectionRotated = CameraRotationYawOnly * InputDirectionNoRotation;
+		AddMovementInput(InputDirectionRotated);
 	}
 	else
 	{
-		InputDirection = InputDirectionRaw;
+		AddMovementInput(InputDirectionNoRotation);
 	}
-	//UE_LOG(LogTemp, Log, TEXT("Input direction x: %f y: %f z: %f"), InputDirection.X, InputDirection.Y, InputDirection.Z);
 }
 
-
-void AMerinoCharacter::DrawInputDebugHelpers() const
+void AMerinoCharacter::AddControllerCameraPitchInput(float PitchInput)
 {
-	const float LineSize = 100.0f;
-	const float CircleRadius = 20.0f;
-	FVector actorLocation = GetActorLocation();
-	FVector InputDirectionNormalized = InputDirection;
-	//InputDirectionNormalized.Normalize();
-	DrawDebugLine(GetWorld(),
-	              actorLocation,
-	              actorLocation + InputDirectionNormalized * LineSize,
-	              FColor(0, 255, 0),
-	              false);
+	SpawnedCamera->AddPitch(PitchInput);
+}
 
-	DrawDebugSphere(GetWorld(),
-	                actorLocation + InputDirectionNormalized * LineSize,
-	                CircleRadius,
-	                10,
-	                FColor(0, 255, 0));
+void AMerinoCharacter::AddControllerCameraYawInput(float YawInput)
+{
+	SpawnedCamera->AddYaw(YawInput);
 }

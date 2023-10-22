@@ -52,6 +52,16 @@ void UCameraMovementComponent::UpdateCameraYawPitch(float YawInc, float PitchInc
 	Pitch += PitchInc;
 }
 
+void UCameraMovementComponent::UpdateCameraYaw(float YawInc)
+{
+	Yaw += YawInc;
+}
+
+void UCameraMovementComponent::UpdateCameraPitch(float PitchInc)
+{
+	Pitch += PitchInc;
+}
+
 FQuat UCameraMovementComponent::CalculateFinalRotation()
 {
 	FQuat RotationYaw = FQuat(ActorToTrack->GetTransform().GetLocation().UpVector, FMath::DegreesToRadians(Yaw));

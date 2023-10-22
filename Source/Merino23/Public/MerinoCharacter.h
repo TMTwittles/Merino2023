@@ -33,11 +33,16 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	void PlayAttack();
-	void PlayAttack01();
-	void CheckMovementInput();
-	void DrawInputDebugHelpers() const;
+	
+	UFUNCTION(BlueprintCallable)
+	void AddControllerMovementInput(float InputX, float InputY);
 
+	UFUNCTION(BlueprintCallable)
+	void AddControllerCameraPitchInput(float PitchInput);
+
+	UFUNCTION(BlueprintCallable)
+	void AddControllerCameraYawInput(float YawInput);
+	
 	UPROPERTY(Category=Movement, EditAnywhere, BlueprintReadWrite)
 	UMerinoMovementComponent* Movement;
 	
@@ -53,12 +58,6 @@ private:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess="true"))
 	USkeletalMeshComponent* Mesh;
-	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess="true"))
-	UAnimMontage* AttackAnim;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess="true"))
-	UAnimMontage* AttackAnim01;
 	
 	FVector InputDirection;
 };

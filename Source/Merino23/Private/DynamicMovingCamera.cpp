@@ -30,9 +30,14 @@ void ADynamicMovingCamera::Configure(AActor* ActorToFollow)
 	GetWorld()->GetFirstPlayerController()->SetViewTarget(this);
 }
 
-void ADynamicMovingCamera::AddYawPitch(float YawInc, float PitchInc)
+void ADynamicMovingCamera::AddYaw(float YawInc)
 {
-	CameraMovementComponent->UpdateCameraYawPitch(YawInc, PitchInc);
+	CameraMovementComponent->UpdateCameraYaw(YawInc);
+}
+
+void ADynamicMovingCamera::AddPitch(float PitchInc)
+{
+	CameraMovementComponent->UpdateCameraPitch(PitchInc);
 }
 
 float ADynamicMovingCamera::GetYaw()
