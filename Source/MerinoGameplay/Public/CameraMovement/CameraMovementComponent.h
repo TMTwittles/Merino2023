@@ -33,7 +33,8 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	void ConfigureCameraPositionRotation(AActor* TrackingActor, const UCameraComponent* Camera);
 	void UpdateCameraYawPitch(float YawInc, float PitchInc);
-	
+	void UpdateCameraYaw(float YawInc);
+	void UpdateCameraPitch(float PitchInc);
 private:
 	FQuat CalculateFinalRotation();
 	void TickCameraPosition();

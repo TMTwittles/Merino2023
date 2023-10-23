@@ -25,7 +25,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void Configure(AActor* ActorToFollow);
-	void AddYawPitch(float YawInc, float PitchInc);
+	
+	UFUNCTION(BlueprintCallable)
+	void AddYaw(float YawInc);
+
+	UFUNCTION(BlueprintCallable)
+	void AddPitch(float PitchInc);
 	float GetYaw();
 	float GetPitch();
 
