@@ -4,16 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "MerinoMovementState.h"
-#include "GroundedMovementState.generated.h"
+#include "FallingMovementState.generated.h"
 
 /**
  * 
  */
-UCLASS(BlueprintType)
-class MERINOGAMEPLAY_API UGroundedMovementState : public UMerinoMovementState
+UCLASS()
+class MERINOGAMEPLAY_API UFallingMovementState : public UMerinoMovementState
 {
-	GENERATED_BODY()
 public:
-	UGroundedMovementState();
+	UFallingMovementState();
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	GENERATED_BODY()
 };

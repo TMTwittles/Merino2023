@@ -40,8 +40,8 @@ void AMerinoCharacter::Tick(float DeltaTime)
 void AMerinoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
 }
-
 
 void AMerinoCharacter::AddControllerMovementInput(float InputX, float InputY)
 {

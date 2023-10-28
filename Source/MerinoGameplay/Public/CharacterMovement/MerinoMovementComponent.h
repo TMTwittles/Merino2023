@@ -25,8 +25,9 @@ public:
 
 	virtual void AddInputVector(FVector WorldVector, bool bForce) override;
 	virtual FVector ConsumeInputVector() override;
+	const bool CharacterGrounded();
+	void TickRotateToVector(float DeltaTime, FVector TargetVector);
 
-public:
 	UPROPERTY(BlueprintReadWrite, Category=MovementInfo, meta=(AllowPrivateAccess="true"))
 	float MovementAngleDegrees;
 
@@ -44,19 +45,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetActiveMovementState(EMerinoMovementStates MovementStates);
-private:
-	const float InputDiffDegreesRequiresRecalculationThreshold = 30.0f;
-	const float MaxRotationAmount = 180.0f;
-	const bool CharacterFalling();
-	bool ForceRecalculateRotation;
-	float TargetRotationAmount;
-	float TargetTimeSecondsRotateToInput;
-	float CurrentRotationAmount;
-	float ElapsedRotationTime;
-	float RotationDelta;
+
+	UFUNCTION(BlueprintCallable)
+	void AddMovementState(EMerinoMovementStates MovementStates, UMerinoMovementState* _MovementState);
+	
 	FQuat UpdatedActorRotation;
-	FVector CurrentInputVector;
-	FVector PreviousInputVector;
+private:
 	UMerinoMovementState* ActiveMovementState;
 	TMap<TEnumAsByte<EMerinoMovementStates>, UMerinoMovementState*> MovementStateMap;
 };
