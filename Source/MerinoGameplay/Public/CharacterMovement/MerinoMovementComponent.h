@@ -6,6 +6,9 @@
 #include "GameFramework/PawnMovementComponent.h"
 #include "MerinoMovementComponent.generated.h"
 
+enum EMerinoMovementStates : int;
+class UMerinoMovementState;
+class UGroundedMovementState;
 class ADynamicMovingCamera;
 /**
  * 
@@ -22,23 +25,10 @@ public:
 
 	virtual void AddInputVector(FVector WorldVector, bool bForce) override;
 	virtual FVector ConsumeInputVector() override;
-	void SetCamera(ADynamicMovingCamera* _PawnCamera);
-
 
 public:
 	UPROPERTY(BlueprintReadWrite, Category=MovementInfo, meta=(AllowPrivateAccess="true"))
 	float MovementAngleDegrees;
-	
-private:
-
-	ADynamicMovingCamera* PawnCamera; 
-	
-	const float InputDiffDegreesRequiresRecalculationThreshold = 30.0f;
-	const float MaxRotationAmount = 180.0f;
-
-	const bool CharacterFalling();
-	void TickRotateToCamera(float DeltaTime);
-	void TickRotateToInput(float DeltaTime);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes, meta=(AllowPrivateAccess = "true"))
 	float Speed;
@@ -52,6 +42,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes, meta=(AllowPrivateAccess= "true"))
 	float AngularSpeed;
 
+	UFUNCTION(BlueprintCallable)
+	void SetActiveMovementState(EMerinoMovementStates MovementStates);
+private:
+	const float InputDiffDegreesRequiresRecalculationThreshold = 30.0f;
+	const float MaxRotationAmount = 180.0f;
+	const bool CharacterFalling();
 	bool ForceRecalculateRotation;
 	float TargetRotationAmount;
 	float TargetTimeSecondsRotateToInput;
@@ -61,4 +57,6 @@ private:
 	FQuat UpdatedActorRotation;
 	FVector CurrentInputVector;
 	FVector PreviousInputVector;
+	UMerinoMovementState* ActiveMovementState;
+	TMap<TEnumAsByte<EMerinoMovementStates>, UMerinoMovementState*> MovementStateMap;
 };

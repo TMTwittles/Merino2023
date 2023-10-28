@@ -10,8 +10,7 @@ AMerinoCharacter::AMerinoCharacter()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
-	Movement = CreateDefaultSubobject<UMerinoMovementComponent>("Movement");
+	Movement = CreateDefaultSubobject<UMerinoMovementComponent>("MovementComponent");
 	CapsuleCollider = CreateDefaultSubobject<UCapsuleComponent>("CapsuleCollider");
 	SetRootComponent(CapsuleCollider);
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>("PawnMesh");
@@ -28,7 +27,6 @@ void AMerinoCharacter::BeginPlay()
 	if (SpawnedCamera != nullptr)
 	{
 		SpawnedCamera->Configure(this);
-		Movement->SetCamera(SpawnedCamera);
 	}
 }
 
@@ -70,3 +68,4 @@ void AMerinoCharacter::AddControllerCameraYawInput(float YawInput)
 {
 	SpawnedCamera->AddYaw(YawInput);
 }
+

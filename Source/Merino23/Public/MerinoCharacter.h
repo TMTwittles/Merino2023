@@ -1,5 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -7,6 +6,9 @@
 #include "GameFramework/Pawn.h"
 #include "MerinoCharacter.generated.h"
 
+enum EMerinoMovementStates : int;
+class UMerinoMovementState;
+class UGroundedMovementState;
 class UMerinoMovementComponent;
 class ADynamicMovingCamera;
 class UCameraMovementComponent;
@@ -48,6 +50,8 @@ public:
 	
 
 private:
+	
+	
 	ADynamicMovingCamera* SpawnedCamera;
 
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"));
@@ -58,6 +62,4 @@ private:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess="true"))
 	USkeletalMeshComponent* Mesh;
-	
-	FVector InputDirection;
 };
