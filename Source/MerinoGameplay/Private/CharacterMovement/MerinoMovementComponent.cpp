@@ -18,11 +18,6 @@ void UMerinoMovementComponent::BeginPlay()
 void UMerinoMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
-	if (CharacterGrounded())
-	{
-		Velocity.Z -= Gravity;
-	}
 
 	if (ActiveMovementState != nullptr)
 	{
@@ -46,6 +41,7 @@ void UMerinoMovementComponent::SetActiveMovementState(EMerinoMovementStates Move
 	if (MovementStateMap.Contains(Key))
 	{
 		ActiveMovementState = MovementStateMap[Key];
+		ActiveMovementState->EnterMovementState();
 	}
 }
 

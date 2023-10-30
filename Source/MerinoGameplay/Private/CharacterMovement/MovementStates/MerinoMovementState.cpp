@@ -21,3 +21,12 @@ void UMerinoMovementState::ConfigureMovementState(UMerinoMovementComponent* _Mov
 void UMerinoMovementState::Tick(float DeltaTime)
 {
 }
+
+void UMerinoMovementState::EnterMovementState()
+{
+	OnEnter();
+}
+
+void UMerinoMovementState::OnEnter()
+{
+}

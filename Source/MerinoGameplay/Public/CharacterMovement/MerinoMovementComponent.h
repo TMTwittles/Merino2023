@@ -28,19 +28,25 @@ public:
 	const bool CharacterGrounded();
 	void TickRotateToVector(float DeltaTime, FVector TargetVector);
 
-	UPROPERTY(BlueprintReadWrite, Category=MovementInfo, meta=(AllowPrivateAccess="true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float MovementAngleDegrees;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes, meta=(AllowPrivateAccess = "true"))
-	float Speed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
+	float Deceleration;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
+	float Acceleration;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
+	float MaxSpeed;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes, meta=(AllowPrivateAccess= "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float CheckGroundLineTraceDistance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes, meta=(AllowPrivateAccess= "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float Gravity;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes, meta=(AllowPrivateAccess= "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float AngularSpeed;
 
 	UFUNCTION(BlueprintCallable)
@@ -52,5 +58,6 @@ public:
 	FQuat UpdatedActorRotation;
 private:
 	UMerinoMovementState* ActiveMovementState;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="True"))
 	TMap<TEnumAsByte<EMerinoMovementStates>, UMerinoMovementState*> MovementStateMap;
 };

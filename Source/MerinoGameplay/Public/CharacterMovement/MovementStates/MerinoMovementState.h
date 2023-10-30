@@ -16,7 +16,9 @@ public:
 	UMerinoMovementState(UMerinoMovementComponent* _PawnMovementComponent);
 	void ConfigureMovementState(UMerinoMovementComponent* _MovementComponent);
 	virtual void Tick(float DeltaTime);
-
+	void EnterMovementState();
+	
 protected:
 	UMerinoMovementComponent* MovementComponent;
+	virtual void OnEnter();
 };

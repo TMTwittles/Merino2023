@@ -50,8 +50,7 @@ public:
 	
 
 private:
-	
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
 	ADynamicMovingCamera* SpawnedCamera;
 
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"));
