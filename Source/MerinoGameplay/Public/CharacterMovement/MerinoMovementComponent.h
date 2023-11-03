@@ -27,6 +27,7 @@ public:
 	virtual FVector ConsumeInputVector() override;
 	const bool CharacterGrounded();
 	void TickRotateToVector(float DeltaTime, FVector TargetVector);
+	void Jump();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float MovementAngleDegrees;
@@ -47,7 +48,22 @@ public:
 	float Gravity;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
+	float MaxFallingSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float AngularSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
+	float MaxJumpHeight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
+	float StartingJumpGravity;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
+	float MaxJumpGravity;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
+	float AirControl;
 
 	UFUNCTION(BlueprintCallable)
 	void SetActiveMovementState(EMerinoMovementStates MovementStates);

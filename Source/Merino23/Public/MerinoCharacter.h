@@ -44,6 +44,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void AddControllerCameraYawInput(float YawInput);
+
+	UFUNCTION(BlueprintCallable)
+	void AddControllerJumpInput();
 	
 	UPROPERTY(Category=Movement, EditAnywhere, BlueprintReadWrite)
 	UMerinoMovementComponent* Movement;

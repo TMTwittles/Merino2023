@@ -3,6 +3,7 @@
 #include "MerinoMathStatics.h"
 #include "CharacterMovement/MovementStates/FallingMovementState.h"
 #include "CharacterMovement/MovementStates/GroundedMovementState.h"
+#include "CharacterMovement/MovementStates/JumpingMovementState.h"
 #include "CharacterMovement/MovementStates/MerinoMovementState.h"
 #include "CharacterMovement/MovementStates/MerinoMovementStates.h"
 
@@ -12,8 +13,15 @@ void UMerinoMovementComponent::BeginPlay()
 	SetUpdatedComponent(GetOwner()->GetRootComponent());
 	AddMovementState(Grounded, NewObject<UGroundedMovementState>());
 	AddMovementState(Falling, NewObject<UFallingMovementState>());
+	AddMovementState(Jumping, NewObject<UJumpingMovementState>());
 	SetActiveMovementState(Grounded);
 }
+
+void UMerinoMovementComponent::Jump()
+{
+	SetActiveMovementState(EMerinoMovementStates::Jumping);
+}
+
 
 void UMerinoMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {

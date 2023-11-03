@@ -2,7 +2,6 @@
 #include "CharacterMovement\MovementStates\GroundedMovementState.h"
 
 #include "MerinoLogStatics.h"
-#include "MerinoMathStatics.h"
 #include "CharacterMovement\MerinoMovementComponent.h"
 #include "CharacterMovement\MovementStates\MerinoMovementStates.h"
 
@@ -58,7 +57,6 @@ void UGroundedMovementState::Tick(float DeltaTime)
 			LastActiveVelocity = MovementComponent->Velocity;
 		}
 		float Alpha = CalculateNormalizedElapsedDecelerationTime();
-		UMerinoLogStatics::LogFloat("Alpha: ", Alpha);
 		ClampedVelocity = FMath::Lerp(MovementComponent->Velocity, FVector::Zero(), Alpha);
 	}
 	ClampedVelocity = ClampedVelocity.GetClampedToSize(0.0f, MovementComponent->MaxSpeed);

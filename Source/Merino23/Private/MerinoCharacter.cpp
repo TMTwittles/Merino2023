@@ -69,3 +69,8 @@ void AMerinoCharacter::AddControllerCameraYawInput(float YawInput)
 	SpawnedCamera->AddYaw(YawInput);
 }
 
+void AMerinoCharacter::AddControllerJumpInput()
+{
+	Movement->Jump();
+}
+
