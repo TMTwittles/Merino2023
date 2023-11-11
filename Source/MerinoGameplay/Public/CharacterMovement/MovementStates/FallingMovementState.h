@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class MERINOGAMEPLAY_API UFallingMovementState : public UMerinoMovementState
 {
 public:

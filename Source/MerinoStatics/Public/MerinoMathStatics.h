@@ -11,9 +11,9 @@ class MERINOSTATICS_API UMerinoMathStatics : public UObject
 
 public:
 	UFUNCTION(BlueprintCallable)
-	static float GetUnsignedAngleBetweenTwoVectors(FVector From, FVector To);
+	static float GetUnsignedAngleBetweenTwoVectors(FVector A, FVector B);
 	UFUNCTION(BlueprintCallable)
-	static float GetSignedAngleBetweenTwoVectorsRelativeToAxis(FVector From, FVector To, FVector Axis);
+	static float GetSignedAngleBetweenTwoVectorsRelativeToAxis(FVector A, FVector B, FVector Axis);
 	static float GetYawFromQuat(FQuat Quat);
 	static float GetPitchFromQuat(FQuat Quat);
 	static FQuat BuildQuatEuler(float Yaw, float Pitch, float Roll);

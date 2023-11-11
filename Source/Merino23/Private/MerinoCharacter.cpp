@@ -3,6 +3,8 @@
 #include "MerinoMathStatics.h"
 #include "DynamicMovingCamera.h"
 #include "CharacterMovement/MerinoMovementComponent.h"
+#include "CharacterMovement/MovementStateControllerComponent.h"
+#include "CharacterMovement/MovementStates/MerinoMovementStateKey.h"
 #include "Components/CapsuleComponent.h"
 
 // Sets default values
@@ -11,6 +13,10 @@ AMerinoCharacter::AMerinoCharacter()
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	Movement = CreateDefaultSubobject<UMerinoMovementComponent>("MovementComponent");
+	MovementStateController = CreateDefaultSubobject<UMovementStateControllerComponent>("MovementStateController");
+	//MovementStateController->RegisterComponent();
+	MovementStateController->PrimaryComponentTick.bCanEverTick = true;
+	MovementStateController->SetComponentTickEnabled(true);
 	CapsuleCollider = CreateDefaultSubobject<UCapsuleComponent>("CapsuleCollider");
 	SetRootComponent(CapsuleCollider);
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>("PawnMesh");
@@ -71,6 +77,6 @@ void AMerinoCharacter::AddControllerCameraYawInput(float YawInput)
 
 void AMerinoCharacter::AddControllerJumpInput()
 {
-	Movement->Jump();
+	MovementStateController->SetActiveMovementState(Jumping);
 }
 

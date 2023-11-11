@@ -1,10 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "CharacterMovement\MovementStates\GroundedMovementState.h"
-
-#include "MerinoLogStatics.h"
 #include "CharacterMovement\MerinoMovementComponent.h"
-#include "CharacterMovement\MovementStates\MerinoMovementStates.h"
-
+#include "..\..\..\Public\CharacterMovement\MovementStates\MerinoMovementStateKey.h"
+#include "CharacterMovement/MovementStateControllerComponent.h"
 
 
 UGroundedMovementState::UGroundedMovementState()
@@ -13,7 +11,6 @@ UGroundedMovementState::UGroundedMovementState()
 
 void UGroundedMovementState::OnEnter()
 {
-	
 	LastActiveVelocity = FVector::Zero();
 	MovementComponent->Velocity = FVector::Zero();
 }
@@ -30,7 +27,7 @@ void UGroundedMovementState::Tick(float DeltaTime)
 {
 	if (MovementComponent->CharacterGrounded() == false)
 	{
-		MovementComponent->SetActiveMovementState(Falling);
+		Controller->SetActiveMovementState(Falling);
 		return;
 	}
 	

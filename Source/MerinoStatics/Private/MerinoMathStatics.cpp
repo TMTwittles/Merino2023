@@ -1,15 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "MerinoMathStatics.h"
 
-float UMerinoMathStatics::GetUnsignedAngleBetweenTwoVectors(FVector From, FVector To)
+float UMerinoMathStatics::GetUnsignedAngleBetweenTwoVectors(FVector A, FVector B)
 {
-	return acos(FVector::DotProduct(From, To));
+	return acos(FVector::DotProduct(A, B));
 }
 
-float UMerinoMathStatics::GetSignedAngleBetweenTwoVectorsRelativeToAxis(FVector From, FVector To, FVector Axis)
+float UMerinoMathStatics::GetSignedAngleBetweenTwoVectorsRelativeToAxis(FVector A, FVector B, FVector Axis)
 {
-	float UnsignedAngleBetweenTwoVectors = GetUnsignedAngleBetweenTwoVectors(From, To);
-	FVector CrossProduct = FVector::CrossProduct(From, To);
+	float UnsignedAngleBetweenTwoVectors = GetUnsignedAngleBetweenTwoVectors(A, B);
+	FVector CrossProduct = FVector::CrossProduct(A, B);
 	float Dot = FVector::DotProduct(CrossProduct, Axis);
 	// Set dot multiplier to either 1.0 or -1.0 based dot product of cross product.
 	float DotMultiplier = Dot > 0.0f ? 1.0f : -1.0f;

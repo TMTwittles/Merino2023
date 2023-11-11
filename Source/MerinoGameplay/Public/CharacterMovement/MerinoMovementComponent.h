@@ -1,18 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
 #include "CoreMinimal.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "MerinoMovementComponent.generated.h"
 
-enum EMerinoMovementStates : int;
+enum EMerinoMovementStateKey : int;
 class UMerinoMovementState;
 class UGroundedMovementState;
 class ADynamicMovingCamera;
-/**
- * 
- */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMovementStateChanged);
+
 UCLASS(ClassGroup=Movement, meta=(BlueprintSpawnableComponent))
 class MERINOGAMEPLAY_API UMerinoMovementComponent : public UPawnMovementComponent
 {
@@ -20,14 +19,9 @@ class MERINOGAMEPLAY_API UMerinoMovementComponent : public UPawnMovementComponen
 	
 public:
 	virtual void BeginPlay() override;
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
-
-	virtual void AddInputVector(FVector WorldVector, bool bForce) override;
-	virtual FVector ConsumeInputVector() override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,FActorComponentTickFunction* ThisTickFunction) override;
 	const bool CharacterGrounded();
 	void TickRotateToVector(float DeltaTime, FVector TargetVector);
-	void Jump();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float MovementAngleDegrees;
@@ -65,15 +59,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float AirControl;
 
-	UFUNCTION(BlueprintCallable)
-	void SetActiveMovementState(EMerinoMovementStates MovementStates);
-
-	UFUNCTION(BlueprintCallable)
-	void AddMovementState(EMerinoMovementStates MovementStates, UMerinoMovementState* _MovementState);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
+	float NormalizedJumpProgress;
+	
+	UPROPERTY(BlueprintAssignable)
+	FMovementStateChanged MovementStateChanged;
 	
 	FQuat UpdatedActorRotation;
 private:
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="True"))
+	TEnumAsByte<EMerinoMovementStateKey> ActiveMovementStateKey;
+	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="True"))
 	UMerinoMovementState* ActiveMovementState;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="True"))
-	TMap<TEnumAsByte<EMerinoMovementStates>, UMerinoMovementState*> MovementStateMap;
+	TMap<TEnumAsByte<EMerinoMovementStateKey>, UMerinoMovementState*> MovementStateMap;
 };

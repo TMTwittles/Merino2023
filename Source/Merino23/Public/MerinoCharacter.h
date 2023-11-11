@@ -2,11 +2,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CharacterMovement/MovementStateData/MovementStateData.h"
 #include "Engine/DataTable.h"
 #include "GameFramework/Pawn.h"
 #include "MerinoCharacter.generated.h"
 
-enum EMerinoMovementStates : int;
+enum EMerinoMovementStateKey : int;
 class UMerinoMovementState;
 class UGroundedMovementState;
 class UMerinoMovementComponent;
@@ -24,12 +25,7 @@ class MERINO23_API AMerinoCharacter : public APawn
 public:
 	// Sets default values for this pawn's properties
 	AMerinoCharacter();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -47,10 +43,17 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void AddControllerJumpInput();
-	
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:
 	UPROPERTY(Category=Movement, EditAnywhere, BlueprintReadWrite)
 	UMerinoMovementComponent* Movement;
-	
+
+	UPROPERTY(Category=Movement, EditAnywhere, BlueprintReadWrite)
+	UMovementStateControllerComponent* MovementStateController;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))

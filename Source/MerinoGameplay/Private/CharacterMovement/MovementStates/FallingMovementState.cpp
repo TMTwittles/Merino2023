@@ -1,7 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "CharacterMovement/MovementStates/FallingMovementState.h"
 #include "CharacterMovement/MerinoMovementComponent.h"
-#include "CharacterMovement/MovementStates/MerinoMovementStates.h"
+#include "..\..\..\Public\CharacterMovement\MovementStates\MerinoMovementStateKey.h"
+#include "CharacterMovement/MovementStateControllerComponent.h"
 
 UFallingMovementState::UFallingMovementState()
 {
@@ -11,7 +12,7 @@ void UFallingMovementState::Tick(float DeltaTime)
 {
 	if (MovementComponent->CharacterGrounded())
 	{
-		MovementComponent->SetActiveMovementState(Grounded);
+		Controller->SetActiveMovementState(Grounded);
 		return;
 	}
 

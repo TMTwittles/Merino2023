@@ -5,6 +5,6 @@ public class MerinoGameplay : ModuleRules
 {
 	public MerinoGameplay(ReadOnlyTargetRules Target) : base(Target)
 	{
-		PrivateDependencyModuleNames.AddRange(new[] { "Core", "CoreUObject", "Engine","MerinoStatics","Merino23"});
+		PrivateDependencyModuleNames.AddRange(new[] { "Core", "CoreUObject", "Engine","MerinoStatics","Merino23", "AIModule" });
 	}
 }

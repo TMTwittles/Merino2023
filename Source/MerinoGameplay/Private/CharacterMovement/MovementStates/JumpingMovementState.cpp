@@ -1,7 +1,10 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "CharacterMovement\MovementStates\JumpingMovementState.h"
+#include "MerinoDebugStatics.h"
+#include "MerinoLogStatics.h"
 #include "CharacterMovement/MerinoMovementComponent.h"
-#include "CharacterMovement/MovementStates/MerinoMovementStates.h"
+#include "..\..\..\Public\CharacterMovement\MovementStates\MerinoMovementStateKey.h"
+#include "CharacterMovement/MovementStateControllerComponent.h"
 
 void UJumpingMovementState::Tick(float DeltaTime)
 {
@@ -15,7 +18,7 @@ void UJumpingMovementState::Tick(float DeltaTime)
 	{
 		if (MovementComponent->CharacterGrounded())
 		{
-			MovementComponent->SetActiveMovementState(Grounded);
+			Controller->SetActiveMovementState(Grounded);
 			return;
 		}
 		JumpVelocityClamped.Z -= MovementComponent->Gravity;
@@ -30,6 +33,17 @@ void UJumpingMovementState::Tick(float DeltaTime)
 	}
 	MovementComponent->UpdateComponentVelocity();
 	MovementComponent->MoveUpdatedComponent(MovementComponent->Velocity, MovementComponent->UpdatedActorRotation, false);
+	FVector VelNormalized = MovementComponent->Velocity;
+	VelNormalized.Normalize();
+	FVector ActorLocation = MovementComponent->GetOwner()->GetActorLocation();
+	ActorLocation.Z += 50.0f;
+	FVector End = ActorLocation + VelNormalized * 10.0f;
+	FVector Start02 = End;
+	Start02.Z -= 10.0f;
+	//End.Z += 50.0f;
+	UMerinoLogStatics::LogVector("Velocity: ", MovementComponent->Velocity);
+	UMerinoDebugStatics::DrawNonPersistentDebugLine(World, ActorLocation, End, FColor::Red);
+	UMerinoDebugStatics::DrawNonPersistentDebugLine(World, End, End, FColor::Green);
 }
 
 void UJumpingMovementState::OnEnter()
@@ -49,5 +63,6 @@ float UJumpingMovementState::CalculateUpwardsJumpGravity()
 	{
 		Alpha = 1 - (MovementComponent->MaxJumpHeight / ElapsedJumpDistance);
 	}
+	MovementComponent->NormalizedJumpProgress = Alpha;
 	return FMath::Lerp(MovementComponent->StartingJumpGravity, MovementComponent->MaxJumpGravity, Alpha);
 }

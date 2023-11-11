@@ -1,21 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "..\..\..\Public\CharacterMovement\MovementStates\MerinoMovementState.h"
+#include "CharacterMovement\MovementStates\MerinoMovementState.h"
+#include "CharacterMovement/MovementStateControllerComponent.h"
 #include "CharacterMovement/MerinoMovementComponent.h"
 
 UMerinoMovementState::UMerinoMovementState()
 {
 }
 
-UMerinoMovementState::UMerinoMovementState(UMerinoMovementComponent* _PawnMovementComponent)
+void UMerinoMovementState::ConfigureMovementState(
+	UMovementStateControllerComponent* _MSController,
+	UMovementStateData* _Data,
+	UMerinoMovementComponent* _MovementComponent,
+	UWorld* _World)
 {
-	MovementComponent = _PawnMovementComponent;
-}
-
-void UMerinoMovementState::ConfigureMovementState(UMerinoMovementComponent* _MovementComponent)
-{
+	Controller = _MSController;
+	Data = _Data;
 	MovementComponent = _MovementComponent;
+	World = _World;
 }
 
 void UMerinoMovementState::Tick(float DeltaTime)

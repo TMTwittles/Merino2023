@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class MERINOGAMEPLAY_API UJumpingMovementState : public UMerinoMovementState
 {
 	GENERATED_BODY()
@@ -17,6 +17,9 @@ class MERINOGAMEPLAY_API UJumpingMovementState : public UMerinoMovementState
 public:
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float UpwardsJumpProgressNormalized;
+	
 protected:
 	virtual void OnEnter() override;
 
