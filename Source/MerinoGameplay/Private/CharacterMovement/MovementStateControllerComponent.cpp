@@ -1,10 +1,12 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
+#include "MerinoGameplay/Public/CharacterMovement/MovementStateControllerComponent.h"
+
+#include "CharacterMovement/MovementStates/FallingMovementState.h"
 #include "MerinoGameplay/Public/CharacterMovement/MovementStateData/MovementStateData.h"
 #include "MerinoGameplay/Public/CharacterMovement/MovementStates/MerinoMovementState.h"
 #include "MerinoGameplay/Public/CharacterMovement/MerinoMovementComponent.h"
-#include "MerinoGameplay/Public/CharacterMovement/MovementStateControllerComponent.h"
-#include "MerinoLogStatics.h"
 #include "CharacterMovement/MovementStates/GroundedMovementState.h"
+#include "CharacterMovement/MovementStates/JumpingMovementState.h"
 #include "CharacterMovement/MovementStates/MerinoMovementStateKey.h"
 
 void UMovementStateControllerComponent::BeginPlay()
@@ -30,9 +32,10 @@ void UMovementStateControllerComponent::Configure()
 	for (UMovementStateData* Data : MovementStates)
 	{
 		TEnumAsByte<EMerinoMovementStateKey> Key = Data->MovementStateKey;
-		if (MovementStateMap.Contains(Key) == false)
+		UMerinoMovementState* MovementState = BuildMovementState(Data);
+		if (MovementStateMap.Contains(Key) == false && MovementState != nullptr)
 		{
-			BuildMovementState(Data);
+			MovementStateMap.Add(Key, MovementState);
 			MovementStateMap[Key]->ConfigureMovementState(this, Data, MovementComponent, GetWorld());
 		}
 	}
@@ -48,12 +51,20 @@ void UMovementStateControllerComponent::SetActiveMovementState(EMerinoMovementSt
 	}
 }
 
-void UMovementStateControllerComponent::BuildMovementState(UMovementStateData* Data)
+UMerinoMovementState* UMovementStateControllerComponent::BuildMovementState(UMovementStateData* Data) const
 {
+	UMerinoMovementState* MovementState = nullptr;
 	switch (Data->MovementStateKey)
 	{
 	case Grounded:
-		MovementStateMap.Add(Grounded, NewObject<UGroundedMovementState>());
+		MovementState = NewObject<UGroundedMovementState>();
+		break;
+	case Falling:
+		MovementState = NewObject<UFallingMovementState>();
+		break;
+	case Jumping:
+		MovementState = NewObject<UJumpingMovementState>();
 		break;
 	}
+	return MovementState;
 }

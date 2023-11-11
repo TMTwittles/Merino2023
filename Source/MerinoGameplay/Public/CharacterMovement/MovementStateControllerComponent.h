@@ -24,7 +24,7 @@ public:
 	void SetActiveMovementState(EMerinoMovementStateKey NewActiveMovementStateKey);
 
 private:
-	void BuildMovementState(UMovementStateData* Data);
+	UMerinoMovementState* BuildMovementState(UMovementStateData* Data) const;
 	
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess))
 	TArray<UMovementStateData*> MovementStates;

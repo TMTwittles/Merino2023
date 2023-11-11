@@ -21,10 +21,10 @@ public:
 	
 protected:
 	virtual void OnEnter();
+	virtual void PostConfigure(UMovementStateData* Data);
 
 protected:
-	UMovementStateControllerComponent* Controller; 
-	UMovementStateData* Data;
+	UMovementStateControllerComponent* Controller;
 	UMerinoMovementComponent* MovementComponent;
 	UWorld* World;
 };

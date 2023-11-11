@@ -14,9 +14,9 @@ void UMerinoMovementState::ConfigureMovementState(
 	UWorld* _World)
 {
 	Controller = _MSController;
-	Data = _Data;
 	MovementComponent = _MovementComponent;
 	World = _World;
+	PostConfigure(_Data);
 }
 
 void UMerinoMovementState::Tick(float DeltaTime)
@@ -29,5 +29,9 @@ void UMerinoMovementState::EnterMovementState()
 }
 
 void UMerinoMovementState::OnEnter()
+{
+}
+
+void UMerinoMovementState::PostConfigure(UMovementStateData* Data)
 {
 }
