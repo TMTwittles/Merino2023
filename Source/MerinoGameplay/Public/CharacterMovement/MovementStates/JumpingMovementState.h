@@ -28,8 +28,7 @@ private:
 
 private:
 	UJumpingMovementStateData* Data;
-	FVector InitialPosition;
-	FVector InitialVelocity;
-	float ElapsedTime;
+	FVector LateralVelocity;
 	float JumpGravity;
+	float ElapsedTime;
 };

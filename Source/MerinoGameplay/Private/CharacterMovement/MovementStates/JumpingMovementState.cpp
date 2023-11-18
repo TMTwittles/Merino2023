@@ -1,5 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "CharacterMovement\MovementStates\JumpingMovementState.h"
+
+#include "MerinoLogStatics.h"
 #include "CharacterMovement/MerinoMovementComponent.h"
 #include "CharacterMovement/MovementStateData/JumpingMovementStateData.h"
 
@@ -12,34 +14,36 @@ void UJumpingMovementState::Tick(float DeltaTime)
 
 void UJumpingMovementState::OnEnter()
 {
-	InitialVelocity = CalculateInitialVelocity();
-	InitialPosition = MovementComponent->GetOwner()->GetActorLocation();
-	ElapsedTime = 0.0f;
+	LateralVelocity = MovementComponent->Velocity;
+	LateralVelocity.Z = 1.0f;
+	MovementComponent->Velocity = CalculateInitialVelocity();
+	UMerinoLogStatics::LogVector("Initial velocity: ", MovementComponent->Velocity);
 }
 
 void UJumpingMovementState::PostConfigure(UMovementStateData* _Data)
 {
 	Data = Cast<UJumpingMovementStateData>(_Data);
 	JumpGravity = CalculateGravity();
+	UMerinoLogStatics::LogFloat("Jump gravity: ", MovementComponent->MaxJumpGravity);
 }
 
 void UJumpingMovementState::TickJump(float DeltaTime)
 {
-	FVector TickJumpVelocity = InitialVelocity * ElapsedTime;
-	TickJumpVelocity.Z -= 0.5f * JumpGravity * (ElapsedTime * ElapsedTime);
-	MovementComponent->Velocity = TickJumpVelocity;
-	ElapsedTime += DeltaTime;
+	FVector JumpGravityVector = FVector(0.0f, 0.0f, CalculateGravity());
+	MovementComponent->Velocity += 2.0f * JumpGravityVector * (DeltaTime);
+	UMerinoLogStatics::LogFloat("Jump gravity: ", JumpGravity);
+	UMerinoLogStatics::LogFloat("Delta time: ", DeltaTime);
+	UMerinoLogStatics::LogVector("JumpGravity: ", JumpGravityVector);
+	UMerinoLogStatics::LogVector("Velocity ticked: ", MovementComponent->Velocity);
 }
 
 FVector UJumpingMovementState::CalculateInitialVelocity() const
 {
-	FVector _InitialVelocity = FVector::Zero();
-	_InitialVelocity.Z = Data->CalculateInitialVelocityZ();
-	return _InitialVelocity;
+	return (2 * Data->MaxJumpHeight * LateralVelocity) / Data->MaxDistanceFromPeakJumpHeight;
 }
 
 float UJumpingMovementState::CalculateGravity() const
 {
-	return Data->CalculateGravity();
+	return (-2.0f * (Data->MaxJumpHeight * LateralVelocity) / Data->MaxDistanceFromPeakJumpHeight).Z;
 }
 
