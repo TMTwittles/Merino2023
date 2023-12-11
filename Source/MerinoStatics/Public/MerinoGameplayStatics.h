@@ -16,4 +16,5 @@ class MERINOSTATICS_API UMerinoGameplayStatics : public UObject
 
 public:
 	bool CheckActorGrounded(UWorld* World, AActor* Actor);
+	static float CalculateDecelerationTime(FVector* PrevVelocity, FVector* CurrentVelocity, float Deceleration);
 };

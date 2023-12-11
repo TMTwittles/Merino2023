@@ -1,12 +1,11 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "CharacterMovement\MovementStates\JumpingMovementState.h"
-
-#include "MerinoLogStatics.h"
 #include "CharacterMovement/MerinoMovementComponent.h"
 #include "CharacterMovement/MovementStateData/JumpingMovementStateData.h"
 
 void UJumpingMovementState::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
 	TickJump(DeltaTime);
 	MovementComponent->UpdateComponentVelocity();
 	MovementComponent->MoveUpdatedComponent(MovementComponent->Velocity, MovementComponent->UpdatedActorRotation, false);
@@ -14,36 +13,38 @@ void UJumpingMovementState::Tick(float DeltaTime)
 
 void UJumpingMovementState::OnEnter()
 {
-	LateralVelocity = MovementComponent->Velocity;
-	LateralVelocity.Z = 1.0f;
-	MovementComponent->Velocity = CalculateInitialVelocity();
-	UMerinoLogStatics::LogVector("Initial velocity: ", MovementComponent->Velocity);
+	Super::OnEnter();
+	MovementComponent->Velocity += CalculateInitialJumpVelocity();
+	AppliedAirControl = false;
 }
 
 void UJumpingMovementState::PostConfigure(UMovementStateData* _Data)
 {
+	Super::PostConfigure(_Data);
 	Data = Cast<UJumpingMovementStateData>(_Data);
-	JumpGravity = CalculateGravity();
-	UMerinoLogStatics::LogFloat("Jump gravity: ", MovementComponent->MaxJumpGravity);
 }
 
 void UJumpingMovementState::TickJump(float DeltaTime)
 {
-	FVector JumpGravityVector = FVector(0.0f, 0.0f, CalculateGravity());
-	MovementComponent->Velocity += 2.0f * JumpGravityVector * (DeltaTime);
-	UMerinoLogStatics::LogFloat("Jump gravity: ", JumpGravity);
-	UMerinoLogStatics::LogFloat("Delta time: ", DeltaTime);
-	UMerinoLogStatics::LogVector("JumpGravity: ", JumpGravityVector);
-	UMerinoLogStatics::LogVector("Velocity ticked: ", MovementComponent->Velocity);
+	MovementComponent->Velocity += -MovementComponent->GetOwner()->GetActorUpVector() * Data->Gravity * DeltaTime;
+	ApplyHorizontalAirControl(DeltaTime);
 }
 
-FVector UJumpingMovementState::CalculateInitialVelocity() const
+void UJumpingMovementState::ApplyHorizontalAirControl(float DeltaTime)
 {
-	return (2 * Data->MaxJumpHeight * LateralVelocity) / Data->MaxDistanceFromPeakJumpHeight;
+	FVector HorizontalAirControl = CalculateAirControlVector(FVector::Zero(), DeltaTime);
+	// Only apply zero air control once a non-zero air control vector is applied to the components
+	// velocity. 
+	if (AppliedAirControl || HorizontalAirControl != FVector::Zero())
+	{
+		MovementComponent->Velocity.X = HorizontalAirControl.X;
+		MovementComponent->Velocity.Y = HorizontalAirControl.Y;
+		AppliedAirControl = true;
+	}
 }
 
-float UJumpingMovementState::CalculateGravity() const
+FVector UJumpingMovementState::CalculateInitialJumpVelocity() const
 {
-	return (-2.0f * (Data->MaxJumpHeight * LateralVelocity) / Data->MaxDistanceFromPeakJumpHeight).Z;
+	return MovementComponent->GetOwner()->GetActorUpVector() * Data->JumpForce;
 }
 

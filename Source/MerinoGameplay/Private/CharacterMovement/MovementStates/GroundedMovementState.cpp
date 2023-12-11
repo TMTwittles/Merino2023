@@ -4,7 +4,6 @@
 #include "..\..\..\Public\CharacterMovement\MovementStates\MerinoMovementStateKey.h"
 #include "CharacterMovement/MovementStateControllerComponent.h"
 
-
 UGroundedMovementState::UGroundedMovementState()
 {
 }
@@ -25,6 +24,7 @@ float UGroundedMovementState::CalculateNormalizedElapsedDecelerationTime()
 
 void UGroundedMovementState::Tick(float DeltaTime)
 {
+	// Set movement state to grounded if 
 	if (MovementComponent->CharacterGrounded() == false)
 	{
 		Controller->SetActiveMovementState(Falling);

@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AirMovementState.h"
 #include "MerinoMovementState.h"
 #include "JumpingMovementState.generated.h"
 
@@ -10,9 +11,8 @@ class UJumpingMovementStateData;
  * 
  */
 UCLASS(BlueprintType)
-class MERINOGAMEPLAY_API UJumpingMovementState : public UMerinoMovementState
+class MERINOGAMEPLAY_API UJumpingMovementState : public UAirMovementState
 {
-private:
 	GENERATED_BODY()
 
 public:
@@ -21,14 +21,15 @@ public:
 protected:
 	virtual void OnEnter() override;
 	virtual void PostConfigure(UMovementStateData* _Data) override;
+	
 private:
 	void TickJump(float DeltaTime);
-	FVector CalculateInitialVelocity() const;
-	float CalculateGravity() const;
+	void ApplyHorizontalAirControl(float DeltaTime);
+	FVector CalculateInitialJumpVelocity() const;
+	float CalculateGravity(FVector CurrentVelocity) const;
 
 private:
 	UJumpingMovementStateData* Data;
-	FVector LateralVelocity;
-	float JumpGravity;
 	float ElapsedTime;
+	bool AppliedAirControl = false;
 };
