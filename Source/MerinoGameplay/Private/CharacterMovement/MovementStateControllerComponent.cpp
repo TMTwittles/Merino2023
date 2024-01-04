@@ -1,6 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "MerinoGameplay/Public/CharacterMovement/MovementStateControllerComponent.h"
 
+#include "MerinoLogStatics.h"
 #include "CharacterMovement/MovementStates/FallingMovementState.h"
 #include "MerinoGameplay/Public/CharacterMovement/MovementStateData/MovementStateData.h"
 #include "MerinoGameplay/Public/CharacterMovement/MovementStates/MerinoMovementState.h"
@@ -39,6 +40,7 @@ void UMovementStateControllerComponent::Configure()
 			MovementStateMap[Key]->ConfigureMovementState(this, Data, MovementComponent, GetWorld());
 		}
 	}
+	OnMovementStatesConstructed.Broadcast();
 }
 
 void UMovementStateControllerComponent::SetActiveMovementState(EMerinoMovementStateKey NewActiveMovementStateKey)
@@ -47,8 +49,19 @@ void UMovementStateControllerComponent::SetActiveMovementState(EMerinoMovementSt
 	if (MovementStateMap.Contains(Key))
 	{
 		ActiveMovementState = MovementStateMap[Key];
+		OnMovementStateChanged.Broadcast(Key);
 		ActiveMovementState->EnterMovementState();
 	}
+}
+
+UMerinoMovementState* UMovementStateControllerComponent::GetActiveMovementState()
+{
+	return ActiveMovementState;
+}
+
+UMerinoMovementState* UMovementStateControllerComponent::GetMovementState(EMerinoMovementStateKey Key)
+{
+	return MovementStateMap[Key];
 }
 
 UMerinoMovementState* UMovementStateControllerComponent::BuildMovementState(UMovementStateData* Data) const

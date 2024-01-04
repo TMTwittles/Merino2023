@@ -23,6 +23,7 @@ protected:
 
 private:
 	float CalculateNormalizedElapsedDecelerationTime();
+	void StickToGround();
 	
 	FVector LastActiveVelocity;
 };

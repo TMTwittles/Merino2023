@@ -21,7 +21,7 @@ private:
 
 public:
 	void OnEnter() override;
-	FVector CalculateAirControlVector(FVector CurrentVelocity, float DeltaTime);
+	FVector CalculateAirControlVector(FVector AirControlDirection, float DeltaTime);
 
 protected:
 	virtual void PostConfigure(UMovementStateData* _Data) override;

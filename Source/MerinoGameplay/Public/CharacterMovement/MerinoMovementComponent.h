@@ -21,6 +21,8 @@ public:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,FActorComponentTickFunction* ThisTickFunction) override;
 	const bool CharacterGrounded();
+	void UpdateIKFootPositions();
+	void UpdatePelvisRotation();
 	void TickRotateToVector(float DeltaTime, FVector TargetVector);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
@@ -64,6 +66,18 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 	FMovementStateChanged MovementStateChanged;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=FootIK)
+	FVector RightFootPosition;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=FootIK)
+	FVector LeftFootPosition;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FootIK)
+	float IKLineTraceDistance;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="True"), Category=FootIK)
+	float FootIKDistance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=PelvisRotation)
+	FQuat PelvisRotation;
 	
 	FQuat UpdatedActorRotation;
 private:

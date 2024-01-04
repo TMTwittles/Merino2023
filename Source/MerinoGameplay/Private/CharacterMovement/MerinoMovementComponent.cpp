@@ -1,5 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "CharacterMovement/MerinoMovementComponent.h"
+
+#include "MerinoDebugStatics.h"
 #include "MerinoMathStatics.h"
 
 void UMerinoMovementComponent::BeginPlay()
@@ -11,6 +13,8 @@ void UMerinoMovementComponent::BeginPlay()
 void UMerinoMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	UpdateIKFootPositions();
+	UpdatePelvisRotation();
 }
 
 const bool UMerinoMovementComponent::CharacterGrounded()
@@ -20,6 +24,34 @@ const bool UMerinoMovementComponent::CharacterGrounded()
 	FVector LineTraceEnd = LineTraceStart - GetOwner()->GetActorUpVector() * CheckGroundLineTraceDistance;
 	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, LineTraceStart, LineTraceEnd, ECC_WorldStatic);
 	return bHit;
+}
+
+void UMerinoMovementComponent::UpdateIKFootPositions()
+{
+	FVector ActorLocation = GetOwner()->GetActorLocation();
+	FVector ActorRightVector = GetOwner()->GetActorRightVector();
+	FVector LineTraceCheckVector = -GetOwner()->GetActorUpVector() * IKLineTraceDistance;
+	FVector RightLineTraceStart = ActorLocation + (ActorRightVector * FootIKDistance);
+	FVector LeftLineTraceStart = ActorLocation + (ActorRightVector * -FootIKDistance);
+	FHitResult RightHitResult;
+	FHitResult LeftHitResult;
+	bool RightHit = GetWorld()->LineTraceSingleByChannel(RightHitResult, RightLineTraceStart, RightLineTraceStart + LineTraceCheckVector, ECC_WorldStatic);
+	bool LeftHit = GetWorld()->LineTraceSingleByChannel(LeftHitResult, LeftLineTraceStart, LeftLineTraceStart + LineTraceCheckVector, ECC_WorldStatic);
+	if (RightHit)
+	{
+		UMerinoDebugStatics::DrawSingleFrameDebugSphere(GetWorld(), RightHitResult.ImpactPoint, 30.0f, FColor::Red);
+		RightFootPosition = RightHitResult.ImpactPoint;
+	}
+	if (LeftHit)
+	{
+		UMerinoDebugStatics::DrawSingleFrameDebugSphere(GetWorld(), LeftHitResult.ImpactPoint, 30.0f, FColor::Red);
+		LeftFootPosition = LeftHitResult.ImpactPoint;
+	}
+}
+
+void UMerinoMovementComponent::UpdatePelvisRotation()
+{
+	UMerinoDebugStatics::DrawSingleFrameDebugSphere(GetWorld(), GetOwner()->GetActorLocation()+Velocity.GetSafeNormal() * 10.0f, 10.0f, FColor::Green);
 }
 
 void UMerinoMovementComponent::TickRotateToVector(float DeltaTime, FVector TargetVector)
