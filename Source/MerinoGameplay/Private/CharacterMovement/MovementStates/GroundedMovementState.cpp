@@ -36,7 +36,6 @@ void UGroundedMovementState::StickToGround()
 	{
 		FVector EndLocation = HitResult.Location + HitResult.ImpactNormal * 42.0f;
 		MovementComponent->GetOwner()->SetActorLocation(EndLocation);
-		UMerinoDebugStatics::DrawDebugSphereForDuration(World, EndLocation, 50.0f, FColor::Red, 10);
 	}
 }
 
@@ -48,6 +47,8 @@ void UGroundedMovementState::Tick(float DeltaTime)
 		Controller->SetActiveMovementState(Falling);
 		return;
 	}
+
+	StickToGround();
 	
 	FVector CurrentInputVector = MovementComponent->ConsumeInputVector();
 	FVector ClampedVelocity = FVector::Zero();

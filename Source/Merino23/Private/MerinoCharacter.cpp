@@ -6,6 +6,7 @@
 #include "CharacterMovement/MovementStateControllerComponent.h"
 #include "CharacterMovement/MovementStates/MerinoMovementStateKey.h"
 #include "Components/CapsuleComponent.h"
+#include "IK/FootIKSolverComponent.h"
 
 // Sets default values
 AMerinoCharacter::AMerinoCharacter()
@@ -14,9 +15,9 @@ AMerinoCharacter::AMerinoCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	Movement = CreateDefaultSubobject<UMerinoMovementComponent>("MovementComponent");
 	MovementStateController = CreateDefaultSubobject<UMovementStateControllerComponent>("MovementStateController");
-	//MovementStateController->RegisterComponent();
 	MovementStateController->PrimaryComponentTick.bCanEverTick = true;
 	MovementStateController->SetComponentTickEnabled(true);
+	FootIKSolver = CreateDefaultSubobject<UFootIKSolverComponent>("FootIKSolverComponent");
 	CapsuleCollider = CreateDefaultSubobject<UCapsuleComponent>("CapsuleCollider");
 	SetRootComponent(CapsuleCollider);
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>("PawnMesh");

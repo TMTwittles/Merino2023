@@ -39,19 +39,17 @@ void UMerinoMovementComponent::UpdateIKFootPositions()
 	bool LeftHit = GetWorld()->LineTraceSingleByChannel(LeftHitResult, LeftLineTraceStart, LeftLineTraceStart + LineTraceCheckVector, ECC_WorldStatic);
 	if (RightHit)
 	{
-		UMerinoDebugStatics::DrawSingleFrameDebugSphere(GetWorld(), RightHitResult.ImpactPoint, 30.0f, FColor::Red);
 		RightFootPosition = RightHitResult.ImpactPoint;
 	}
 	if (LeftHit)
 	{
-		UMerinoDebugStatics::DrawSingleFrameDebugSphere(GetWorld(), LeftHitResult.ImpactPoint, 30.0f, FColor::Red);
 		LeftFootPosition = LeftHitResult.ImpactPoint;
 	}
 }
 
 void UMerinoMovementComponent::UpdatePelvisRotation()
 {
-	UMerinoDebugStatics::DrawSingleFrameDebugSphere(GetWorld(), GetOwner()->GetActorLocation()+Velocity.GetSafeNormal() * 10.0f, 10.0f, FColor::Green);
+	
 }
 
 void UMerinoMovementComponent::TickRotateToVector(float DeltaTime, FVector TargetVector)
