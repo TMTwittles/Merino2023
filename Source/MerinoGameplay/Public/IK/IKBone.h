@@ -1,8 +1,8 @@
 ﻿#pragma once
-#include "IKKey.generated.h"
+#include "IKBone.generated.h"
 
 UENUM(BlueprintType)
-enum EIKKEY
+enum EIKBone
 {
 	LeftFoot UMETA(DisplayName = "LeftFoot"),
 	RightFoot UMETA(DisplayName = "RightFoot")

@@ -1,9 +1,11 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "IK\FootIKSolverComponent.h"
+
 #include "MerinoDebugStatics.h"
 #include "MerinoLogStatics.h"
-#include "SkeletalMeshAttributes.h"
 #include "CharacterMovement/MerinoMovementComponent.h"
+#include "IK/IKBone.h"
+#include "IK/IKFootBoneEffector.h"
 
 // Sets default values for this component's properties
 UFootIKSolverComponent::UFootIKSolverComponent()
@@ -11,84 +13,71 @@ UFootIKSolverComponent::UFootIKSolverComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	// ...
 	CurrentFootPosition = FVector::Zero();
 	NewFootPosition = FVector::Zero();
-	BoneMap.Empty();
+	AffectedBones.Empty();
 }
 
-// Called when the game starts
 void UFootIKSolverComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
 	SkeletalMeshComponent = GetOwner()->GetComponentByClass<USkeletalMeshComponent>();
 	MovementComponent = GetOwner()->GetComponentByClass<UMerinoMovementComponent>();
-	BoneMap.Add(EIKKEY::LeftFoot, LeftFootBone);
-	BoneMap.Add(EIKKEY::RightFoot, RightFootBone);
+	UIKFootBoneEffector* LeftFootBoneEffector = NewObject<UIKFootBoneEffector>();
+	LeftFootBoneEffector->Initialize(GetWorld(), SkeletalMeshComponent, LeftFootBone.EffectorBoneName,
+		GroundIKAlphaSpeed, ReleaseIKAlphaSpeed, IKCheckDistance, FeetPositionAdjustmentAmount);
+	UIKFootBoneEffector* RightFootBoneEffector = NewObject<UIKFootBoneEffector>();
+	RightFootBoneEffector->Initialize(GetWorld(), SkeletalMeshComponent, RightFootBone.EffectorBoneName,
+		GroundIKAlphaSpeed, ReleaseIKAlphaSpeed, IKCheckDistance, FeetPositionAdjustmentAmount);
+	AffectedBones.Add(LeftFoot, LeftFootBoneEffector);
+	AffectedBones.Add(RightFoot, RightFootBoneEffector);
 }
-
-void UFootIKSolverComponent::UpdateIKCalculations()
-{
-	FVector StepStart = GetOwner()->GetActorLocation() + MovementComponent->Velocity.GetSafeNormal() * StepDistance;
-	NewFootPosition = StepStart;
-	//UMerinoDebugStatics::DrawSingleFrameDebugSphere(GetWorld(), NewFootPosition, 10.0f, FColor::Green);
-	if (FVector::Dist(NewFootPosition, CurrentFootPosition) > MinDistanceRecalculateFootPosition)
-	{
-		CurrentFootPosition = NewFootPosition;
-	}
-	//UMerinoDebugStatics::DrawSingleFrameDebugSphere(GetWorld(), CurrentFootPosition, 10.0f, FColor::Red);
-
-	FVector CheckGroundLineTrace = -GetOwner()->GetActorUpVector() * IKCheckDistance;
-	FVector RightLineTraceOrigin = CurrentFootPosition + GetOwner()->GetActorRightVector() * StepXOffset;
-	FVector LeftLineTraceOrigin = CurrentFootPosition + -GetOwner()->GetActorRightVector() * StepXOffset;
-	FHitResult RightHitResult;
-	bool bRightHit = GetWorld()->LineTraceSingleByChannel(RightHitResult, RightLineTraceOrigin, RightLineTraceOrigin + CheckGroundLineTrace, ECC_WorldStatic);
-	FHitResult LeftHitResult;
-	bool bLeftHit = GetWorld()->LineTraceSingleByChannel(LeftHitResult, LeftLineTraceOrigin, LeftLineTraceOrigin + CheckGroundLineTrace, ECC_WorldStatic);
-	if (bRightHit)
-	{
-		//UMerinoDebugStatics::DrawSingleFrameDebugSphere(GetWorld(), RightHitResult.ImpactPoint, 10.0f, FColor::Green);
-	}
-	if (bLeftHit)
-	{
-		//UMerinoDebugStatics::DrawSingleFrameDebugSphere(GetWorld(), LeftHitResult.ImpactPoint, 10.0f, FColor::Green);
-	}
-}
-
 
 // Called every frame
 void UFootIKSolverComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	TickFootAlphas(DeltaTime);
 }
 
-FVector UFootIKSolverComponent::GetEffectorJointPosition(TEnumAsByte<EIKKEY> Key) const
+
+void UFootIKSolverComponent::GroundFoot(TEnumAsByte<EIKBone> Key)
 {
-	if (BoneMap.Contains(Key) == false
-		|| SkeletalMeshComponent == nullptr)
+	if (AffectedBones.Contains(Key) == false)
 	{
-		return FVector::Zero();
+		return;
 	}
-	FVector InitialFootPosition = SkeletalMeshComponent->GetSocketLocation(BoneMap[Key].EffectorBoneName);	
-	FVector CorrectedFootPosition = GetEffectorJointPosition(InitialFootPosition + GetOwner()->GetActorUpVector() * 20.0f);
-	if (CorrectedFootPosition == FVector::Zero())
-	{
-		CorrectedFootPosition = InitialFootPosition;
-	}
-	return CorrectedFootPosition;
+	AffectedBones[Key]->Ground();
 }
 
-FVector UFootIKSolverComponent::GetEffectorJointPosition(FVector CheckGroundLineTraceStart) const
+void UFootIKSolverComponent::ReleaseFoot(TEnumAsByte<EIKBone> Key)
 {
-	FVector FootPosition = FVector::Zero();
-	FHitResult HitResult;
-	FVector CheckGroundLineTrace = -GetOwner()->GetActorUpVector() * IKCheckDistance;
-	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, CheckGroundLineTraceStart, CheckGroundLineTraceStart + GetOwner()->GetActorUpVector() * 20.0f + CheckGroundLineTrace, ECC_WorldStatic);
-	if (bHit)
+	if (AffectedBones.Contains(Key) == false)
 	{
-		FootPosition = HitResult.ImpactPoint;
-		UMerinoDebugStatics::DrawSingleFrameDebugSphere(GetWorld(), FootPosition, 10.0f, FColor::Red);
+		return;
 	}
-	return FootPosition;
+	AffectedBones[Key]->Release();
+}
+
+void UFootIKSolverComponent::TickFootAlphas(float DeltaTime)
+{
+	if (AffectedBones.Num() == 0)
+	{
+		return;
+	}
+
+	AffectedBones[LeftFoot]->Tick(DeltaTime);
+	AffectedBones[RightFoot]->Tick(DeltaTime);
+	UMerinoLogStatics::LogVector("Right foot affector location:", AffectedBones[RightFoot]->GetEffectorLocation());
+}
+
+UIKFootBoneEffector* UFootIKSolverComponent::GetFootBoneEffector(TEnumAsByte<EIKBone> Key)
+{
+	if (AffectedBones.Contains(Key) == false)
+	{
+		return nullptr;
+	}
+	return AffectedBones[Key];
 }
 

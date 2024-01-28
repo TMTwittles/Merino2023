@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include "IKBone.h"
 #include "IKInfo.generated.h"
 
 USTRUCT(BlueprintType)
@@ -8,8 +8,8 @@ struct FIKInfo
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName EffectorBoneName;
-	
+	TEnumAsByte<EIKBone> BoneKey;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName TargetJointBoneName;
+	FName EffectorBoneName;
 };

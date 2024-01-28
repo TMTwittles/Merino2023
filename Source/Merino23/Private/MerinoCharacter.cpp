@@ -17,8 +17,8 @@ AMerinoCharacter::AMerinoCharacter()
 	MovementStateController = CreateDefaultSubobject<UMovementStateControllerComponent>("MovementStateController");
 	MovementStateController->PrimaryComponentTick.bCanEverTick = true;
 	MovementStateController->SetComponentTickEnabled(true);
-	FootIKSolver = CreateDefaultSubobject<UFootIKSolverComponent>("FootIKSolverComponent");
 	CapsuleCollider = CreateDefaultSubobject<UCapsuleComponent>("CapsuleCollider");
+	FootIKSolver = CreateDefaultSubobject<UFootIKSolverComponent>("FootIKSolverComponent");
 	SetRootComponent(CapsuleCollider);
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>("PawnMesh");
 	Mesh->SetupAttachment(GetRootComponent());
