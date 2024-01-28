@@ -23,14 +23,13 @@ void UAirMovementState::Tick(float DeltaTime)
 
 void UAirMovementState::OnEnter()
 {
-	PrevAirMovementVector = FVector::Zero();
 	CurrentAirMovementVector = FVector::Zero();
 	LastActiveAirMovementVector = FVector::Zero();
 }
 
-FVector UAirMovementState::CalculateAirControlVector(FVector CurrentVelocity, float DeltaTime)
+FVector UAirMovementState::CalculateAirControlVector(FVector AirControlDirection, float DeltaTime)
 {
-	FVector InputVector = MovementComponent->ConsumeInputVector();
+	FVector InputVector = AirControlDirection;
 	if (InputVector == FVector::Zero())
 	{
 		float Alpha = UMerinoGameplayStatics::CalculateDecelerationTime(&LastActiveAirMovementVector, &CurrentAirMovementVector, Data->AirControlDeceleration * DeltaTime);
@@ -38,10 +37,9 @@ FVector UAirMovementState::CalculateAirControlVector(FVector CurrentVelocity, fl
 	}
 	else
 	{
-		CurrentAirMovementVector = PrevAirMovementVector + (InputVector * Data->AirControlAcceleration) * DeltaTime;
-		CurrentAirMovementVector = CurrentAirMovementVector.GetClampedToSize(0.0f, Data->MaxAirControlSpeed);
-		LastActiveAirMovementVector = CurrentAirMovementVector;
+		CurrentAirMovementVector = (InputVector * Data->AirControlAcceleration) * DeltaTime;
+		LastActiveAirMovementVector = MovementComponent->Velocity;
+		LastActiveAirMovementVector.Z = 0.0f;
 	}
-	PrevAirMovementVector = CurrentAirMovementVector;
 	return CurrentAirMovementVector;
 }

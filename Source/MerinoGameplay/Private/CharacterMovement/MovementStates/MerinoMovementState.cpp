@@ -21,6 +21,7 @@ void UMerinoMovementState::ConfigureMovementState(
 
 void UMerinoMovementState::Tick(float DeltaTime)
 {
+	
 }
 
 void UMerinoMovementState::EnterMovementState()
@@ -30,6 +31,7 @@ void UMerinoMovementState::EnterMovementState()
 
 void UMerinoMovementState::OnEnter()
 {
+	
 }
 
 void UMerinoMovementState::PostConfigure(UMovementStateData* Data)

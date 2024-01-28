@@ -1,5 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "CharacterMovement\MovementStates\GroundedMovementState.h"
+
+#include "MerinoDebugStatics.h"
 #include "CharacterMovement\MerinoMovementComponent.h"
 #include "..\..\..\Public\CharacterMovement\MovementStates\MerinoMovementStateKey.h"
 #include "CharacterMovement/MovementStateControllerComponent.h"
@@ -10,6 +12,7 @@ UGroundedMovementState::UGroundedMovementState()
 
 void UGroundedMovementState::OnEnter()
 {
+	StickToGround();
 	LastActiveVelocity = FVector::Zero();
 	MovementComponent->Velocity = FVector::Zero();
 }
@@ -22,6 +25,20 @@ float UGroundedMovementState::CalculateNormalizedElapsedDecelerationTime()
 	return ElapsedDecelerationTime / TotalDecelerationTime;
 }
 
+void UGroundedMovementState::StickToGround()
+{
+	FHitResult HitResult;
+	FVector LineTraceStart = MovementComponent->GetOwner()->GetActorLocation();
+	FVector LineTraceEnd = LineTraceStart - MovementComponent->GetOwner()->GetActorUpVector() * MovementComponent->CheckGroundLineTraceDistance;
+	bool bHit = World->LineTraceSingleByChannel(HitResult, LineTraceStart, LineTraceEnd, ECC_WorldStatic);
+
+	if (bHit)
+	{
+		FVector EndLocation = HitResult.Location + HitResult.ImpactNormal * 42.0f;
+		MovementComponent->GetOwner()->SetActorLocation(EndLocation);
+	}
+}
+
 void UGroundedMovementState::Tick(float DeltaTime)
 {
 	// Set movement state to grounded if 
@@ -30,6 +47,8 @@ void UGroundedMovementState::Tick(float DeltaTime)
 		Controller->SetActiveMovementState(Falling);
 		return;
 	}
+
+	StickToGround();
 	
 	FVector CurrentInputVector = MovementComponent->ConsumeInputVector();
 	FVector ClampedVelocity = FVector::Zero();

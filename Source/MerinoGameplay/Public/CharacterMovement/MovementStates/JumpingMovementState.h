@@ -26,10 +26,17 @@ private:
 	void TickJump(float DeltaTime);
 	void ApplyHorizontalAirControl(float DeltaTime);
 	FVector CalculateInitialJumpVelocity() const;
-	float CalculateGravity(FVector CurrentVelocity) const;
+	void CalculateJumpHeights();
+	void TickNormalizedJumpProgress();
 
+public:
+	UPROPERTY(BlueprintReadOnly)
+	float NormalizedJumpProgress;
+	
 private:
 	UJumpingMovementStateData* Data;
 	float ElapsedTime;
+	float StartJumpHeight;
+	float MaxJumpHeight;
 	bool AppliedAirControl = false;
 };

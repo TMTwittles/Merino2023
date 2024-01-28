@@ -1,5 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "CharacterMovement\MovementStates\JumpingMovementState.h"
+#include "MerinoMathStatics.h"
 #include "CharacterMovement/MerinoMovementComponent.h"
 #include "CharacterMovement/MovementStateData/JumpingMovementStateData.h"
 
@@ -13,9 +14,10 @@ void UJumpingMovementState::Tick(float DeltaTime)
 
 void UJumpingMovementState::OnEnter()
 {
-	Super::OnEnter();
 	MovementComponent->Velocity += CalculateInitialJumpVelocity();
 	AppliedAirControl = false;
+	CalculateJumpHeights();
+	TickNormalizedJumpProgress();
 }
 
 void UJumpingMovementState::PostConfigure(UMovementStateData* _Data)
@@ -28,23 +30,52 @@ void UJumpingMovementState::TickJump(float DeltaTime)
 {
 	MovementComponent->Velocity += -MovementComponent->GetOwner()->GetActorUpVector() * Data->Gravity * DeltaTime;
 	ApplyHorizontalAirControl(DeltaTime);
+	TickNormalizedJumpProgress();
 }
 
 void UJumpingMovementState::ApplyHorizontalAirControl(float DeltaTime)
 {
-	FVector HorizontalAirControl = CalculateAirControlVector(FVector::Zero(), DeltaTime);
+	FVector InputDirection = MovementComponent->ConsumeInputVector();
+	FVector HorizontalAirControl = CalculateAirControlVector(InputDirection, DeltaTime);
 	// Only apply zero air control once a non-zero air control vector is applied to the components
 	// velocity. 
 	if (AppliedAirControl || HorizontalAirControl != FVector::Zero())
 	{
-		MovementComponent->Velocity.X = HorizontalAirControl.X;
-		MovementComponent->Velocity.Y = HorizontalAirControl.Y;
+		FVector HorizontalJumpVelocity = MovementComponent->Velocity;
+		HorizontalJumpVelocity.Z = 0.0f;
+		HorizontalJumpVelocity.X += HorizontalAirControl.X;
+		HorizontalJumpVelocity.Y += HorizontalAirControl.Y;
+		FVector HorizontalJumpVelocityClamped = HorizontalJumpVelocity.GetClampedToSize(0.0f, Data->MaxAirControlSpeed);
+		MovementComponent->Velocity.X = HorizontalJumpVelocityClamped.X;
+		MovementComponent->Velocity.Y = HorizontalJumpVelocityClamped.Y;
 		AppliedAirControl = true;
+	}
+	if (InputDirection != FVector::Zero())
+	{
+		MovementComponent->TickRotateToVector(DeltaTime, InputDirection);
 	}
 }
 
 FVector UJumpingMovementState::CalculateInitialJumpVelocity() const
 {
 	return MovementComponent->GetOwner()->GetActorUpVector() * Data->JumpForce;
+}
+
+void UJumpingMovementState::CalculateJumpHeights()
+{
+	StartJumpHeight = MovementComponent->GetActorLocation().Z;
+	float JumpAngle = UMerinoMathStatics::GetUnsignedAngleBetweenTwoVectors(
+			MovementComponent->GetOwner()->GetActorForwardVector(),
+			MovementComponent->Velocity.GetSafeNormal());
+	FVector InitialJumpVelocity = MovementComponent->Velocity * FMath::Sin(JumpAngle);
+	float YInitialJumpVelocity = InitialJumpVelocity.Z;
+	MaxJumpHeight = (YInitialJumpVelocity * YInitialJumpVelocity) / (2 * (Data->Gravity * World->GetDeltaSeconds()));
+	MaxJumpHeight += StartJumpHeight;
+}
+
+void UJumpingMovementState::TickNormalizedJumpProgress()
+{
+	NormalizedJumpProgress = (MovementComponent->GetActorLocation().Z - StartJumpHeight) / (MaxJumpHeight - StartJumpHeight);
+	NormalizedJumpProgress = FMath::Clamp(NormalizedJumpProgress, 0.0f, 1.0f);
 }
 
