@@ -2,6 +2,7 @@
 #include "IK/IKFootBoneEffector.h"
 
 #include "MerinoDebugStatics.h"
+#include "MerinoLogStatics.h"
 #include "IK/IKState.h"
 
 UIKFootBoneEffector::UIKFootBoneEffector()
@@ -25,12 +26,24 @@ void UIKFootBoneEffector::Initialize(UWorld* InWorld, USkeletalMeshComponent* In
 
 void UIKFootBoneEffector::Ground()
 {
+	if (CurrentState != Inactive)
+	{
+		IKAlpha = 0.0f;
+	}
+	
+	ElapsedIKAlpaTickTime = 0.0f;
 	CurrentState = EnteringActive;
 	EffectorLocation = CalculateEffectorLocation();
 }
 
 void UIKFootBoneEffector::Release()
 {
+	if (CurrentState != Active)
+	{
+		IKAlpha = 1.0f;
+	}
+	
+	ElapsedIKAlpaTickTime = 0.0f;
 	CurrentState = EnteringInactive;
 }
 
@@ -38,11 +51,13 @@ void UIKFootBoneEffector::Tick(float DeltaTime)
 {
 	if (CurrentState == EnteringActive)
 	{
-		TickUpdateIK(DeltaTime, 0.0f, 1.0f, EnterIKAlphaSpeed, Active);
+		//UMerinoLogStatics::LogFloat("Entering active: ", IKAlpha);
+		TickEnterActiveIK(DeltaTime);
 	}
 	else if (CurrentState == EnteringInactive)
 	{
-		TickUpdateIK(DeltaTime, 1.0f, 0.0f, ReleaseIKAlphaSpeed, Inactive);
+		UMerinoLogStatics::LogFloat("Entering inactive: ", IKAlpha);
+		TickEnterReleaseIK(DeltaTime);
 	}
 }
 
@@ -67,25 +82,35 @@ FVector UIKFootBoneEffector::CalculateEffectorLocation()
 	if (bHit)
 	{
 		FootPosition = HitResult.ImpactPoint + HitResult.ImpactNormal * FootPositionAdjustmentAmount;
-		
+		UMerinoDebugStatics::DrawDebugSphereForDuration(World, FootPosition, 10.0f, FColor::Red, 10.0f);
 	}
 	return FootPosition;
 }
 
-void UIKFootBoneEffector::TickUpdateIK(float DeltaTime, float StartAlpha, float EndAlpha, float UpdateAlphaSpeed, EIKState TargetState)
+float UIKFootBoneEffector::GetTickIKAlphaValue(float DeltaTime, float Speed) const
 {
-	float LerpAlpha = 0.0f;
-	if (ElapsedIKAlpaTickTime != 0.0f)
+	return FMath::Lerp(0.0f, 1.0f, Speed * DeltaTime);
+}
+
+void UIKFootBoneEffector::TickEnterActiveIK(float DeltaTime)
+{
+	IKAlpha += GetTickIKAlphaValue(DeltaTime, EnterIKAlphaSpeed);
+	UMerinoLogStatics::LogFloat("Ground IK Alpha: ", IKAlpha);
+	if (IKAlpha >= 1.0f)
 	{
-		LerpAlpha = ElapsedIKAlpaTickTime / UpdateAlphaSpeed;
+		CurrentState = Active;
+		IKAlpha = 1.0f;
 	}
-	float Function = LerpAlpha * LerpAlpha * LerpAlpha;
-	IKAlpha = FMath::Lerp(StartAlpha, EndAlpha, Function);
-	ElapsedIKAlpaTickTime += DeltaTime;
-	if (IKAlpha >= EndAlpha)
+}
+
+void UIKFootBoneEffector::TickEnterReleaseIK(float DeltaTime)
+{
+	IKAlpha -= GetTickIKAlphaValue(DeltaTime, EnterIKAlphaSpeed);
+	UMerinoLogStatics::LogFloat("Release IK Alpha: ", GetTickIKAlphaValue(DeltaTime, EnterIKAlphaSpeed));
+	UMerinoLogStatics::LogFloat("Release IK Alpha: ", IKAlpha);
+	if (IKAlpha <= 0.0f)
 	{
-		CurrentState = TargetState;
-		IKAlpha = EndAlpha;
-		ElapsedIKAlpaTickTime = 0.0f;
+		CurrentState = Inactive;
+		IKAlpha = 0.0f;
 	}
 }

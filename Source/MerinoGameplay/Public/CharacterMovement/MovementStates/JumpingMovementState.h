@@ -34,7 +34,8 @@ public:
 	float NormalizedJumpProgress;
 	
 private:
-	UJumpingMovementStateData* Data;
+	UPROPERTY()
+	UJumpingMovementStateData* JumpingData;
 	float ElapsedTime;
 	float StartJumpHeight;
 	float MaxJumpHeight;

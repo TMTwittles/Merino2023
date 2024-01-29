@@ -27,7 +27,8 @@ protected:
 	virtual void PostConfigure(UMovementStateData* _Data) override;
 
 private:
-	UAirMovementStateData* Data;
+	UPROPERTY()
+	UAirMovementStateData* AirData;
 	FVector LastActiveAirMovementVector;
 	FVector PrevAirMovementVector;
 	FVector CurrentAirMovementVector;

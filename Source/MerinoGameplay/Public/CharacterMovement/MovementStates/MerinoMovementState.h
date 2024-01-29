@@ -24,7 +24,10 @@ protected:
 	virtual void PostConfigure(UMovementStateData* Data);
 
 protected:
+	UPROPERTY()
 	UMovementStateControllerComponent* Controller;
+	UPROPERTY()
 	UMerinoMovementComponent* MovementComponent;
+	UPROPERTY()
 	UWorld* World;
 };

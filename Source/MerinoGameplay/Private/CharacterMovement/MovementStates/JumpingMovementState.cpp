@@ -23,12 +23,12 @@ void UJumpingMovementState::OnEnter()
 void UJumpingMovementState::PostConfigure(UMovementStateData* _Data)
 {
 	Super::PostConfigure(_Data);
-	Data = Cast<UJumpingMovementStateData>(_Data);
+	JumpingData = Cast<UJumpingMovementStateData>(_Data);
 }
 
 void UJumpingMovementState::TickJump(float DeltaTime)
 {
-	MovementComponent->Velocity += -MovementComponent->GetOwner()->GetActorUpVector() * Data->Gravity * DeltaTime;
+	MovementComponent->Velocity += -MovementComponent->GetOwner()->GetActorUpVector() * JumpingData->Gravity * DeltaTime;
 	ApplyHorizontalAirControl(DeltaTime);
 	TickNormalizedJumpProgress();
 }
@@ -45,7 +45,7 @@ void UJumpingMovementState::ApplyHorizontalAirControl(float DeltaTime)
 		HorizontalJumpVelocity.Z = 0.0f;
 		HorizontalJumpVelocity.X += HorizontalAirControl.X;
 		HorizontalJumpVelocity.Y += HorizontalAirControl.Y;
-		FVector HorizontalJumpVelocityClamped = HorizontalJumpVelocity.GetClampedToSize(0.0f, Data->MaxAirControlSpeed);
+		FVector HorizontalJumpVelocityClamped = HorizontalJumpVelocity.GetClampedToSize(0.0f, JumpingData->MaxAirControlSpeed);
 		MovementComponent->Velocity.X = HorizontalJumpVelocityClamped.X;
 		MovementComponent->Velocity.Y = HorizontalJumpVelocityClamped.Y;
 		AppliedAirControl = true;
@@ -58,7 +58,7 @@ void UJumpingMovementState::ApplyHorizontalAirControl(float DeltaTime)
 
 FVector UJumpingMovementState::CalculateInitialJumpVelocity() const
 {
-	return MovementComponent->GetOwner()->GetActorUpVector() * Data->JumpForce;
+	return MovementComponent->GetOwner()->GetActorUpVector() * JumpingData->JumpForce;
 }
 
 void UJumpingMovementState::CalculateJumpHeights()
@@ -69,7 +69,7 @@ void UJumpingMovementState::CalculateJumpHeights()
 			MovementComponent->Velocity.GetSafeNormal());
 	FVector InitialJumpVelocity = MovementComponent->Velocity * FMath::Sin(JumpAngle);
 	float YInitialJumpVelocity = InitialJumpVelocity.Z;
-	MaxJumpHeight = (YInitialJumpVelocity * YInitialJumpVelocity) / (2 * (Data->Gravity * World->GetDeltaSeconds()));
+	MaxJumpHeight = (YInitialJumpVelocity * YInitialJumpVelocity) / (2 * (JumpingData->Gravity * World->GetDeltaSeconds()));
 	MaxJumpHeight += StartJumpHeight;
 }
 

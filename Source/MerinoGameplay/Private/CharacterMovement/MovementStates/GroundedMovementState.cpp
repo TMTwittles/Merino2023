@@ -48,7 +48,7 @@ void UGroundedMovementState::Tick(float DeltaTime)
 		return;
 	}
 
-	StickToGround();
+	//StickToGround();
 	
 	FVector CurrentInputVector = MovementComponent->ConsumeInputVector();
 	FVector ClampedVelocity = FVector::Zero();

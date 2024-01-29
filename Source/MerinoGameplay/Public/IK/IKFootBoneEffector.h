@@ -28,8 +28,9 @@ public:
 
 private:
 	FVector CalculateEffectorLocation();
-	void TickUpdateIK(float DeltaTime, float StartAlpha, float EndAlpha, float UpdateAlphaSpeed, EIKState TargetState);
-	
+	float GetTickIKAlphaValue(float DeltaTime, float Speed) const;
+	void TickEnterActiveIK(float DeltaTime);
+	void TickEnterReleaseIK(float DeltaTime);
 private:
 	UPROPERTY()
 	UWorld* World;

@@ -42,6 +42,7 @@ private:
 	float TanFOVY = 0.0f;
 	float TanFOVX = 0.0f;
 	FVector LocalOffset;
+	UPROPERTY()
 	AActor* ActorToTrack;
 
 	UPROPERTY(EditAnywhere, Category="Camera Movement Settings", meta=(AllowPrivateAccess = "true"))

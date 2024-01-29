@@ -1,8 +1,5 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "IK\FootIKSolverComponent.h"
-
-#include "MerinoDebugStatics.h"
-#include "MerinoLogStatics.h"
 #include "CharacterMovement/MerinoMovementComponent.h"
 #include "IK/IKBone.h"
 #include "IK/IKFootBoneEffector.h"
@@ -69,7 +66,6 @@ void UFootIKSolverComponent::TickFootAlphas(float DeltaTime)
 
 	AffectedBones[LeftFoot]->Tick(DeltaTime);
 	AffectedBones[RightFoot]->Tick(DeltaTime);
-	UMerinoLogStatics::LogVector("Right foot affector location:", AffectedBones[RightFoot]->GetEffectorLocation());
 }
 
 UIKFootBoneEffector* UFootIKSolverComponent::GetFootBoneEffector(TEnumAsByte<EIKBone> Key)
