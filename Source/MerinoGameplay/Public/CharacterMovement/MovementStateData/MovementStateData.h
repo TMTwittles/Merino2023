@@ -18,4 +18,6 @@ class MERINOGAMEPLAY_API UMovementStateData : public UDataAsset
 public:
 	UPROPERTY(EditAnywhere)
 	TEnumAsByte<EMerinoMovementStateKey> MovementStateKey;
+	UPROPERTY(EditAnywhere)
+	TArray<TEnumAsByte<EMovementStateBehaviourKey>> Behaviours;
 };

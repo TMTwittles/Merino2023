@@ -45,6 +45,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddControllerJumpInput();
 
+	UFUNCTION(BlueprintCallable)
+	void EnterLockOn();
+
+	UFUNCTION(BlueprintCallable)
+	void ReleaseLockOn();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

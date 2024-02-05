@@ -4,6 +4,9 @@
 #include "CoreMinimal.h"
 #include "MovementStateControllerComponent.generated.h"
 
+enum EMovementStateBehaviourKey : int;
+class UMovementStateBehaviour;
+class UBehaviourController;
 class UMerinoMovementComponent;
 class UMovementStateData;
 enum EMerinoMovementStateKey : int;
@@ -34,7 +37,10 @@ public:
 	
 private:
 	UMerinoMovementState* BuildMovementState(UMovementStateData* Data) const;
-	
+	UBehaviourController* BuildBehaviourController(UMerinoMovementState* ParentState, UMovementStateData* Data) const;
+	UMovementStateBehaviour* BuildMovementStateBehaviour(EMovementStateBehaviourKey Key) const;
+
+private:
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess))
 	TArray<UMovementStateData*> MovementStates;
 	UPROPERTY()

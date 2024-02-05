@@ -5,6 +5,9 @@
 #include "CharacterMovement/MerinoMovementComponent.h"
 #include "CharacterMovement/MovementStateControllerComponent.h"
 #include "CharacterMovement/MovementStates/MerinoMovementStateKey.h"
+#include "CharacterMovement/MovementStates/MovementStateBehaviours/BehaviourController.h"
+#include "CharacterMovement/MovementStates/MovementStateBehaviours/LockOnMovementStateBehaviour.h"
+#include "CharacterMovement/MovementStates/MovementStateBehaviours/MovementStateBehaviourKey.h"
 #include "Components/CapsuleComponent.h"
 #include "IK/FootIKSolverComponent.h"
 
@@ -79,5 +82,17 @@ void AMerinoCharacter::AddControllerCameraYawInput(float YawInput)
 void AMerinoCharacter::AddControllerJumpInput()
 {
 	MovementStateController->SetActiveMovementState(Jumping);
+}
+
+void AMerinoCharacter::EnterLockOn()
+{
+	if (MovementStateController->GetActiveMovementState()->BehaviourController->ContainsBehaviour(LockOn))
+	{
+		MovementStateController->GetActiveMovementState()->BehaviourController->GetBehaviour<ULockOnMovementStateBehaviour>(LockOn)->SetActive(true);
+	}
+}
+
+void AMerinoCharacter::ReleaseLockOn()
+{
 }
 

@@ -1,7 +1,5 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "MerinoGameplay/Public/CharacterMovement/MovementStateControllerComponent.h"
-
-#include "MerinoLogStatics.h"
 #include "CharacterMovement/MovementStates/FallingMovementState.h"
 #include "MerinoGameplay/Public/CharacterMovement/MovementStateData/MovementStateData.h"
 #include "MerinoGameplay/Public/CharacterMovement/MovementStates/MerinoMovementState.h"
@@ -9,6 +7,10 @@
 #include "CharacterMovement/MovementStates/GroundedMovementState.h"
 #include "CharacterMovement/MovementStates/JumpingMovementState.h"
 #include "CharacterMovement/MovementStates/MerinoMovementStateKey.h"
+#include "CharacterMovement/MovementStates/MovementStateBehaviours/BehaviourController.h"
+#include "CharacterMovement/MovementStates/MovementStateBehaviours/LockOnMovementStateBehaviour.h"
+#include "CharacterMovement/MovementStates/MovementStateBehaviours/MovementStateBehaviour.h"
+#include "CharacterMovement/MovementStates/MovementStateBehaviours/MovementStateBehaviourKey.h"
 
 void UMovementStateControllerComponent::BeginPlay()
 {
@@ -37,7 +39,8 @@ void UMovementStateControllerComponent::Configure()
 		if (MovementStateMap.Contains(Key) == false && MovementState != nullptr)
 		{
 			MovementStateMap.Add(Key, MovementState);
-			MovementStateMap[Key]->ConfigureMovementState(this, Data, MovementComponent, GetWorld());
+			UBehaviourController* BehaviourController = BuildBehaviourController(MovementState, Data);
+			MovementStateMap[Key]->ConfigureMovementState(BehaviourController, this, Data, MovementComponent, GetWorld());
 		}
 	}
 	OnMovementStatesConstructed.Broadcast();
@@ -64,6 +67,7 @@ UMerinoMovementState* UMovementStateControllerComponent::GetMovementState(EMerin
 	return MovementStateMap[Key];
 }
 
+// TODO: Move this to static factory methods. 
 UMerinoMovementState* UMovementStateControllerComponent::BuildMovementState(UMovementStateData* Data) const
 {
 	UMerinoMovementState* MovementState = nullptr;
@@ -81,3 +85,28 @@ UMerinoMovementState* UMovementStateControllerComponent::BuildMovementState(UMov
 	}
 	return MovementState;
 }
+
+UBehaviourController* UMovementStateControllerComponent::BuildBehaviourController(UMerinoMovementState* ParentState, UMovementStateData* Data) const
+{
+	UBehaviourController* Controller = NewObject<UBehaviourController>();
+	Controller->Initialize(ParentState);
+	for (EMovementStateBehaviourKey Key : Data->Behaviours)
+	{
+		Controller->AddBehaviour(Key, BuildMovementStateBehaviour(Key));
+	}
+	return Controller;
+}
+
+UMovementStateBehaviour* UMovementStateControllerComponent::BuildMovementStateBehaviour(EMovementStateBehaviourKey Key) const
+{
+	UMovementStateBehaviour* ConstructedBehaviour = nullptr;
+	switch (Key)
+	{
+	case LockOn:
+		ConstructedBehaviour = NewObject<ULockOnMovementStateBehaviour>();
+		break;
+	}
+	return ConstructedBehaviour;
+}
+
+

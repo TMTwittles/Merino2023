@@ -1,10 +1,17 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "CharacterMovement\MovementStates\GroundedMovementState.h"
-
-#include "MerinoDebugStatics.h"
 #include "CharacterMovement\MerinoMovementComponent.h"
 #include "..\..\..\Public\CharacterMovement\MovementStates\MerinoMovementStateKey.h"
 #include "CharacterMovement/MovementStateControllerComponent.h"
+#include "CharacterMovement/MovementStates/MovementStateBehaviours/BehaviourController.h"
+#include "CharacterMovement/MovementStates/MovementStateBehaviours/MovementStateBehaviourKey.h"
+#include "CharacterMovement/MovementStates/MovementStateBehaviours/LockOnMovementStateBehaviour.h"
+
+void UGroundedMovementState::PostConfigure(UMovementStateData* Data)
+{
+	Super::PostConfigure(Data);
+	LockOnBehaviour = BehaviourController->GetBehaviour<ULockOnMovementStateBehaviour>(LockOn);
+}
 
 UGroundedMovementState::UGroundedMovementState()
 {
@@ -48,8 +55,6 @@ void UGroundedMovementState::Tick(float DeltaTime)
 		return;
 	}
 
-	//StickToGround();
-	
 	FVector CurrentInputVector = MovementComponent->ConsumeInputVector();
 	FVector ClampedVelocity = FVector::Zero();
 	if (CurrentInputVector != FVector::Zero())

@@ -6,5 +6,6 @@ enum EMerinoMovementStateKey
 {
 	Grounded UMETA(DisplayName = "Grounded"),
 	Falling UMETA(DisplayName = "Falling"),
-	Jumping UMETA(DisplayName = "Jumping")
+	Jumping UMETA(DisplayName = "Jumping"),
+	Strafing UMETA(DisplayName = "Strafing")
 };

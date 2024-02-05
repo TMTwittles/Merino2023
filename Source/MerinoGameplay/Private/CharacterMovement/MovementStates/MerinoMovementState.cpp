@@ -7,12 +7,11 @@ UMerinoMovementState::UMerinoMovementState()
 {
 }
 
-void UMerinoMovementState::ConfigureMovementState(
-	UMovementStateControllerComponent* _MSController,
-	UMovementStateData* _Data,
-	UMerinoMovementComponent* _MovementComponent,
-	UWorld* _World)
+void UMerinoMovementState::ConfigureMovementState(UBehaviourController* _BehaviourController,
+	UMovementStateControllerComponent* _MSController, UMovementStateData* _Data,
+	UMerinoMovementComponent* _MovementComponent, UWorld* _World)
 {
+	BehaviourController = _BehaviourController;
 	Controller = _MSController;
 	MovementComponent = _MovementComponent;
 	World = _World;
