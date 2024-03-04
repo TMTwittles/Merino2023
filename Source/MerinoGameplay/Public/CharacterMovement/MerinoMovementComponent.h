@@ -5,7 +5,7 @@
 #include "GameFramework/PawnMovementComponent.h"
 #include "MerinoMovementComponent.generated.h"
 
-enum EMerinoMovementStateKey : int;
+enum EStateID : int;
 class UMerinoMovementState;
 class UGroundedMovementState;
 class ADynamicMovingCamera;
@@ -19,11 +19,12 @@ class MERINOGAMEPLAY_API UMerinoMovementComponent : public UPawnMovementComponen
 	
 public:
 	virtual void BeginPlay() override;
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,FActorComponentTickFunction* ThisTickFunction) override;
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	const bool CharacterGrounded();
-	void UpdateIKFootPositions();
-	void UpdatePelvisRotation();
 	void TickRotateToVector(float DeltaTime, FVector TargetVector);
+	void TickAcceleration(float DeltaTime, FVector Direction);
+	void TickDeceleration(float DeltaTime);
+	void Update();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float MovementAngleDegrees;
@@ -47,7 +48,7 @@ public:
 	float MaxFallingSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
-	float AngularSpeed;
+	float AngularRotationSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float MaxJumpHeight;
@@ -64,27 +65,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float NormalizedJumpProgress;
 	
-	UPROPERTY(BlueprintAssignable)
-	FMovementStateChanged MovementStateChanged;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=FootIK)
-	FVector RightFootPosition;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=FootIK)
-	FVector LeftFootPosition;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FootIK)
-	float IKLineTraceDistance;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="True"), Category=FootIK)
-	float FootIKDistance;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=PelvisRotation)
-	FQuat PelvisRotation;
-	
-	FQuat UpdatedActorRotation;
 private:
+	FQuat UpdatedActorRotation;
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="True"))
-	TEnumAsByte<EMerinoMovementStateKey> ActiveMovementStateKey;
+	TEnumAsByte<EStateID> ActiveMovementStateKey;
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="True"))
 	UMerinoMovementState* ActiveMovementState;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="True"))
-	TMap<TEnumAsByte<EMerinoMovementStateKey>, UMerinoMovementState*> MovementStateMap;
+	TMap<TEnumAsByte<EStateID>, UMerinoMovementState*> MovementStateMap;
+	UPROPERTY()
+	FVector LastActiveVelocity;
 };

@@ -7,8 +7,9 @@
 #include "GameFramework/Pawn.h"
 #include "MerinoCharacter.generated.h"
 
+class UMerinoStateMachineComponent;
 class UFootIKSolverComponent;
-enum EMerinoMovementStateKey : int;
+enum EStateID : int;
 class UMerinoMovementState;
 class UGroundedMovementState;
 class UMerinoMovementComponent;
@@ -59,9 +60,9 @@ public:
 	UPROPERTY(Category=Movement, EditAnywhere, BlueprintReadWrite)
 	UMerinoMovementComponent* Movement;
 
-	UPROPERTY(Category=Movement, EditAnywhere, BlueprintReadWrite)
-	UMovementStateControllerComponent* MovementStateController;
-
+	UPROPERTY(Category=StateMachine, EditAnywhere, BlueprintReadWrite)
+	UMerinoStateMachineComponent* StateMachineComponent;
+	
 	UPROPERTY(Category=IK, EditAnywhere, BlueprintReadWrite)
 	UFootIKSolverComponent* FootIKSolver;
 

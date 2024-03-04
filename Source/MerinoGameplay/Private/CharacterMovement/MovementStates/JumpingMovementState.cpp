@@ -8,8 +8,8 @@ void UJumpingMovementState::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	TickJump(DeltaTime);
-	MovementComponent->UpdateComponentVelocity();
-	MovementComponent->MoveUpdatedComponent(MovementComponent->Velocity, MovementComponent->UpdatedActorRotation, false);
+	//MovementComponent->UpdateComponentVelocity();
+	//MovementComponent->MoveUpdatedComponent(MovementComponent->Velocity, MovementComponent->UpdatedActorRotation, false);
 }
 
 void UJumpingMovementState::OnEnter()

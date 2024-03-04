@@ -34,7 +34,7 @@ void UMovementStateControllerComponent::Configure()
 	UMerinoMovementComponent* MovementComponent = GetOwner()->GetComponentByClass<UMerinoMovementComponent>();
 	for (UMovementStateData* Data : MovementStates)
 	{
-		TEnumAsByte<EMerinoMovementStateKey> Key = Data->MovementStateKey;
+		TEnumAsByte<EStateID> Key = Data->MovementStateKey;
 		UMerinoMovementState* MovementState = BuildMovementState(Data);
 		if (MovementStateMap.Contains(Key) == false && MovementState != nullptr)
 		{
@@ -46,9 +46,9 @@ void UMovementStateControllerComponent::Configure()
 	OnMovementStatesConstructed.Broadcast();
 }
 
-void UMovementStateControllerComponent::SetActiveMovementState(EMerinoMovementStateKey NewActiveMovementStateKey)
+void UMovementStateControllerComponent::SetActiveMovementState(EStateID NewActiveMovementStateKey)
 {
-	TEnumAsByte<EMerinoMovementStateKey> Key = NewActiveMovementStateKey;
+	TEnumAsByte<EStateID> Key = NewActiveMovementStateKey;
 	if (MovementStateMap.Contains(Key))
 	{
 		ActiveMovementState = MovementStateMap[Key];
@@ -62,7 +62,7 @@ UMerinoMovementState* UMovementStateControllerComponent::GetActiveMovementState(
 	return ActiveMovementState;
 }
 
-UMerinoMovementState* UMovementStateControllerComponent::GetMovementState(EMerinoMovementStateKey Key)
+UMerinoMovementState* UMovementStateControllerComponent::GetMovementState(EStateID Key)
 {
 	return MovementStateMap[Key];
 }

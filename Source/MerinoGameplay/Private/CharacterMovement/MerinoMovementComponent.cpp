@@ -1,20 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "CharacterMovement/MerinoMovementComponent.h"
-
-#include "MerinoDebugStatics.h"
 #include "MerinoMathStatics.h"
 
 void UMerinoMovementComponent::BeginPlay()
 {
 	SetUpdatedComponent(GetOwner()->GetRootComponent());
 	Super::BeginPlay();
-}
-
-void UMerinoMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	UpdateIKFootPositions();
-	UpdatePelvisRotation();
 }
 
 const bool UMerinoMovementComponent::CharacterGrounded()
@@ -26,43 +17,46 @@ const bool UMerinoMovementComponent::CharacterGrounded()
 	return bHit;
 }
 
-void UMerinoMovementComponent::UpdateIKFootPositions()
-{
-	FVector ActorLocation = GetOwner()->GetActorLocation();
-	FVector ActorRightVector = GetOwner()->GetActorRightVector();
-	FVector LineTraceCheckVector = -GetOwner()->GetActorUpVector() * IKLineTraceDistance;
-	FVector RightLineTraceStart = ActorLocation + (ActorRightVector * FootIKDistance);
-	FVector LeftLineTraceStart = ActorLocation + (ActorRightVector * -FootIKDistance);
-	FHitResult RightHitResult;
-	FHitResult LeftHitResult;
-	bool RightHit = GetWorld()->LineTraceSingleByChannel(RightHitResult, RightLineTraceStart, RightLineTraceStart + LineTraceCheckVector, ECC_WorldStatic);
-	bool LeftHit = GetWorld()->LineTraceSingleByChannel(LeftHitResult, LeftLineTraceStart, LeftLineTraceStart + LineTraceCheckVector, ECC_WorldStatic);
-	if (RightHit)
-	{
-		RightFootPosition = RightHitResult.ImpactPoint;
-	}
-	if (LeftHit)
-	{
-		LeftFootPosition = LeftHitResult.ImpactPoint;
-	}
-}
-
-void UMerinoMovementComponent::UpdatePelvisRotation()
-{
-	
-}
-
 void UMerinoMovementComponent::TickRotateToVector(float DeltaTime, FVector TargetVector)
 {
-	FVector InputDirection = TargetVector.GetSafeNormal();
 	FVector ActorForwardVector = GetOwner()->GetActorForwardVector();
 	float TargetRotationAmount = UMerinoMathStatics::GetSignedAngleBetweenTwoVectorsRelativeToAxis
 	(
 		ActorForwardVector,
-		InputDirection,
+		TargetVector,
 		GetOwner()->GetActorUpVector());
-	float TickRotationAmount = FMath::Lerp(0.0f, TargetRotationAmount, DeltaTime * AngularSpeed);
+	float TickRotationAmount = FMath::Lerp(0.0f, TargetRotationAmount, DeltaTime) * AngularRotationSpeed;
 	FQuat CurrentActorRotation = GetOwner()->GetActorRotation().Quaternion();
 	FQuat TickRotation = FQuat(GetOwner()->GetActorUpVector(), TickRotationAmount);
 	UpdatedActorRotation = CurrentActorRotation * TickRotation;
+}
+
+void UMerinoMovementComponent::TickAcceleration(float DeltaTime, FVector Direction)
+{
+	// Set to velocity, used to calculate deceleration.
+	LastActiveVelocity = Velocity;
+	FVector NewVelocity = Velocity + Direction * Acceleration * DeltaTime;
+	NewVelocity = NewVelocity.GetClampedToSize(0.0f, MaxSpeed);
+	Velocity = NewVelocity;
+}
+
+void UMerinoMovementComponent::TickDeceleration(float DeltaTime)
+{
+	// Already slowed down. No need.
+	if (Velocity == FVector::Zero())
+	{
+		return;
+	}
+
+	// Set deceleration vector opposing the direction of our velocity scaled by deceleration amount.
+	FVector DecelerationVector = -Velocity.GetSafeNormal() * Deceleration;
+	FVector DecelerationVelocity = Velocity + DecelerationVector * DeltaTime;
+	DecelerationVelocity = DecelerationVelocity.GetClampedToSize(0.0f, DecelerationVelocity.Size());
+	Velocity = DecelerationVelocity;
+}
+
+void UMerinoMovementComponent::Update()
+{
+	UpdateComponentVelocity();
+	MoveUpdatedComponent(Velocity, UpdatedActorRotation, false);
 }

@@ -16,7 +16,7 @@ void UAirMovementState::Tick(float DeltaTime)
 {
 	if (MovementComponent->Velocity.Z < 0.0f && MovementComponent->CharacterGrounded())
 	{
-		Controller->SetActiveMovementState(EMerinoMovementStateKey::Grounded);
+		Controller->SetActiveMovementState(EStateID::Grounded);
 		return;
 	}
 }
