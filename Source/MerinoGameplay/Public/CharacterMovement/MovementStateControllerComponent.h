@@ -9,11 +9,11 @@ class UMovementStateBehaviour;
 class UBehaviourController;
 class UMerinoMovementComponent;
 class UMovementStateData;
-enum EMerinoMovementStateKey : int;
+enum EStateID : int;
 class UMerinoMovementState;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMovementStatesConstructed);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMovementStateChanged, EMerinoMovementStateKey, MovementStateKey);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMovementStateChanged, EStateID, MovementStateKey);
 
 UCLASS(meta=(BlueprintSpawnableComponent))
 class MERINOGAMEPLAY_API UMovementStateControllerComponent : public UActorComponent
@@ -25,11 +25,11 @@ public:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,FActorComponentTickFunction* ThisTickFunction) override;
 	void Configure();
-	void SetActiveMovementState(EMerinoMovementStateKey NewActiveMovementStateKey);
+	void SetActiveMovementState(EStateID NewActiveMovementStateKey);
 	UFUNCTION(BlueprintCallable)
 	UMerinoMovementState* GetActiveMovementState();
 	UFUNCTION(BlueprintCallable)
-	UMerinoMovementState* GetMovementState(EMerinoMovementStateKey Key);
+	UMerinoMovementState* GetMovementState(EStateID Key);
 	UPROPERTY(BlueprintAssignable)
 	FOnMovementStateChanged OnMovementStateChanged;
 	UPROPERTY(BlueprintAssignable)
@@ -44,7 +44,7 @@ private:
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess))
 	TArray<UMovementStateData*> MovementStates;
 	UPROPERTY()
-	TMap<TEnumAsByte<EMerinoMovementStateKey>, UMerinoMovementState*> MovementStateMap;
+	TMap<TEnumAsByte<EStateID>, UMerinoMovementState*> MovementStateMap;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="True"))
 	UMerinoMovementState* ActiveMovementState;
 };

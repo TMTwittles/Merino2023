@@ -59,11 +59,7 @@ void UGroundedMovementState::Tick(float DeltaTime)
 	FVector ClampedVelocity = FVector::Zero();
 	if (CurrentInputVector != FVector::Zero())
 	{
-		if (LastActiveVelocity != FVector::Zero())
-		{
-			LastActiveVelocity = FVector::Zero();
-		}
-		ClampedVelocity = MovementComponent->Velocity + CurrentInputVector * MovementComponent->Acceleration;
+//		MovementComponent->TickVelocity(DeltaTime, CurrentInputVector);
 		MovementComponent->TickRotateToVector(DeltaTime, ClampedVelocity);
 	}
 	else
@@ -83,5 +79,5 @@ void UGroundedMovementState::Tick(float DeltaTime)
 	ClampedVelocity = ClampedVelocity.GetClampedToSize(0.0f, MovementComponent->MaxSpeed);
 	MovementComponent->Velocity = ClampedVelocity;
 	MovementComponent->UpdateComponentVelocity();
-	MovementComponent->MoveUpdatedComponent(MovementComponent->Velocity, MovementComponent->UpdatedActorRotation, false);
+//	MovementComponent->MoveUpdatedComponent(MovementComponent->Velocity, MovementComponent->UpdatedActorRotation, false);
 }

@@ -10,18 +10,23 @@
 #include "CharacterMovement/MovementStates/MovementStateBehaviours/MovementStateBehaviourKey.h"
 #include "Components/CapsuleComponent.h"
 #include "IK/FootIKSolverComponent.h"
+#include "HSFM/MerinoStateMachineComponent.h"
 
 // Sets default values
 AMerinoCharacter::AMerinoCharacter()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	// Build actor components
 	Movement = CreateDefaultSubobject<UMerinoMovementComponent>("MovementComponent");
-	MovementStateController = CreateDefaultSubobject<UMovementStateControllerComponent>("MovementStateController");
-	MovementStateController->PrimaryComponentTick.bCanEverTick = true;
-	MovementStateController->SetComponentTickEnabled(true);
-	CapsuleCollider = CreateDefaultSubobject<UCapsuleComponent>("CapsuleCollider");
 	FootIKSolver = CreateDefaultSubobject<UFootIKSolverComponent>("FootIKSolverComponent");
+	StateMachineComponent = CreateDefaultSubobject<UMerinoStateMachineComponent>("StateMachineComponent");
+	StateMachineComponent->SetComponentTickEnabled(true);
+	StateMachineComponent->PrimaryComponentTick.bCanEverTick = true;
+
+	// Build scene components
+	CapsuleCollider = CreateDefaultSubobject<UCapsuleComponent>("CapsuleCollider");
 	SetRootComponent(CapsuleCollider);
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>("PawnMesh");
 	Mesh->SetupAttachment(GetRootComponent());
@@ -81,15 +86,15 @@ void AMerinoCharacter::AddControllerCameraYawInput(float YawInput)
 
 void AMerinoCharacter::AddControllerJumpInput()
 {
-	MovementStateController->SetActiveMovementState(Jumping);
+	//MovementStateController->SetActiveMovementState(Jumping);
 }
 
 void AMerinoCharacter::EnterLockOn()
 {
-	if (MovementStateController->GetActiveMovementState()->BehaviourController->ContainsBehaviour(LockOn))
+	/*if (MovementStateController->GetActiveMovementState()->BehaviourController->ContainsBehaviour(LockOn))
 	{
 		MovementStateController->GetActiveMovementState()->BehaviourController->GetBehaviour<ULockOnMovementStateBehaviour>(LockOn)->SetActive(true);
-	}
+	}*/
 }
 
 void AMerinoCharacter::ReleaseLockOn()

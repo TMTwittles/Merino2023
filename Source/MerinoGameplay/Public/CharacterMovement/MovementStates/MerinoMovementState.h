@@ -9,7 +9,7 @@ class UMovementStateBehaviour;
 enum EMovementStateBehaviourKey : int;
 class UMovementStateControllerComponent;
 class UMovementStateData;
-enum EMerinoMovementStateKey : int;
+enum EStateID : int;
 class UMerinoMovementComponent;
 
 UCLASS(BlueprintType, Abstract)

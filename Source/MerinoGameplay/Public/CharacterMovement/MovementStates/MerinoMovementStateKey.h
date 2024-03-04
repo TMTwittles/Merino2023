@@ -2,7 +2,7 @@
 #include "MerinoMovementStateKey.generated.h"
 
 UENUM(BlueprintType)
-enum EMerinoMovementStateKey
+enum EStateID
 {
 	Grounded UMETA(DisplayName = "Grounded"),
 	Falling UMETA(DisplayName = "Falling"),
