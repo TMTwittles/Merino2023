@@ -17,8 +17,9 @@ void UGroundedState::TickState(float DeltaTime)
 	FVector InputVector = MovementComponent->ConsumeInputVector();
 	if (InputVector != FVector::Zero())
 	{
-		MovementComponent->TickAcceleration(DeltaTime, InputVector);
-		MovementComponent->TickRotateToVector(DeltaTime, MovementComponent->Velocity.GetSafeNormal());
+		FVector InputVectorNormalized = InputVector.GetSafeNormal();
+		MovementComponent->TickAcceleration(DeltaTime, InputVectorNormalized);
+		MovementComponent->TickRotateToVector(DeltaTime, InputVectorNormalized);
 	}
 	else
 	{

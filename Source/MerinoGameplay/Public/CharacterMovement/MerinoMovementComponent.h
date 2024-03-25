@@ -30,6 +30,9 @@ public:
 	float MovementAngleDegrees;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
+	float TargetRotationAmountDegrees = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float Deceleration;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
@@ -64,6 +67,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float NormalizedJumpProgress;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
+	float MovementAmountNormalized = 0.0f;
+
 	
 private:
 	FQuat UpdatedActorRotation;
