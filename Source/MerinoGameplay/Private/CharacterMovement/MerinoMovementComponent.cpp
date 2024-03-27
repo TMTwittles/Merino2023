@@ -33,14 +33,15 @@ void UMerinoMovementComponent::TickRotateToVector(float DeltaTime, FVector Targe
 	float TickRotationAmount = FMath::Lerp(0.0f, TargetRotationAmount, DeltaTime) * AngularRotationSpeed;
 	FQuat CurrentActorRotation = GetOwner()->GetActorRotation().Quaternion();
 	FQuat TickRotation = FQuat(GetOwner()->GetActorUpVector(), TickRotationAmount);
-	//UpdatedActorRotation = CurrentActorRotation * TickRotation;
+	UpdatedActorRotation = CurrentActorRotation * TickRotation;
 }
 
-void UMerinoMovementComponent::TickAcceleration(float DeltaTime, FVector Direction)
+void UMerinoMovementComponent::TickAcceleration(float DeltaTime, FVector Direction, float InputAmountNormalized)
 {
 	// Set to velocity, used to calculate deceleration.
 	LastActiveVelocity = Velocity;
 	FVector NewVelocity = Velocity + Direction * Acceleration;
+	NewVelocity *= InputAmountNormalized;
 	NewVelocity = NewVelocity.GetClampedToSize(0.0f, MaxSpeed);
 	UMerinoDebugStatics::DrawSingleFrameDebugSphere(GetWorld(), GetOwner()->GetActorLocation() + NewVelocity.Size() * NewVelocity.GetSafeNormal(), 10.0f, FColor::Red);
 	UMerinoLogStatics::LogFloat("Velocity size: ", NewVelocity.Size());
@@ -69,6 +70,13 @@ void UMerinoMovementComponent::TickDeceleration(float DeltaTime)
 
 	// Set deceleration vector opposing the direction of our velocity scaled by deceleration amount.
 	FVector DecelerationVector = -Velocity.GetSafeNormal() * Deceleration;
+	
+	// If deceleration vector greater than velocity, thus instantly end velocity. 
+	if (DecelerationVector.Size() >= Velocity.Size())
+	{
+		DecelerationVector = -Velocity;
+	}
+
 	FVector DecelerationVelocity = Velocity + DecelerationVector;
 	DecelerationVelocity = DecelerationVelocity.GetClampedToSize(0.0f, MaxSpeed);
 	MovementAmountNormalized = UKismetMathLibrary::NormalizeToRange(DecelerationVelocity.Size(), 0.0f, MaxSpeed);

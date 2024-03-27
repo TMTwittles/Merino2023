@@ -22,7 +22,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	const bool CharacterGrounded();
 	void TickRotateToVector(float DeltaTime, FVector TargetVector);
-	void TickAcceleration(float DeltaTime, FVector Direction);
+	void TickAcceleration(float DeltaTime, FVector Direction, float InputAmountNormalized = 1.0f);
 	void TickDeceleration(float DeltaTime);
 	void Update();
 
