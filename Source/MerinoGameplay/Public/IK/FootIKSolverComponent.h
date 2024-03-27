@@ -29,16 +29,19 @@ public:
 	UIKFootBoneEffector* GetFootBoneEffector(TEnumAsByte<EIKBone> Key);
 
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="True"), Category="IK Attributes")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "True"), Category = "IK Attributes")
+	bool bIKActive = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="True"), Category = "IK Attributes")
 	float IKCheckDistance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="True"), Category="IK Attributes")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="True"), Category = "IK Attributes")
 	float StepDistance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="True"), Category="IK Attributes")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="True"), Category = "IK Attributes")
 	float FeetPositionAdjustmentAmount;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="True"), Category="IK Attributes")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="True"), Category = "IK Attributes")
 	float GroundIKAlphaSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="True"), Category="IK Attributes")

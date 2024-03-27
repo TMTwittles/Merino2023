@@ -13,7 +13,12 @@ float UMerinoMathStatics::GetSignedAngleBetweenTwoVectorsRelativeToAxis(FVector 
 	float Dot = FVector::DotProduct(CrossProduct, Axis);
 	// Set dot multiplier to either 1.0 or -1.0 based dot product of cross product.
 	float DotMultiplier = Dot > 0.0f ? 1.0f : -1.0f;
-	return FMath::Clamp(DotMultiplier * UnsignedAngleBetweenTwoVectors, -180.0f, 180.0f);
+	float MaxAngleDegrees = 180.0f;
+	float MinAngleDegrees = -180.0f;
+	float MaxAngle = FMath::DegreesToRadians(MaxAngleDegrees);
+	float MinAngle = FMath::DegreesToRadians(MinAngleDegrees);
+	return DotMultiplier * UnsignedAngleBetweenTwoVectors;
+	return FMath::Clamp(DotMultiplier * UnsignedAngleBetweenTwoVectors, MinAngle, MaxAngle);
 }
 
 float UMerinoMathStatics::GetYawFromQuat(FQuat Quat)

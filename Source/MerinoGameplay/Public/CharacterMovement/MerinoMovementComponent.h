@@ -22,12 +22,15 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	const bool CharacterGrounded();
 	void TickRotateToVector(float DeltaTime, FVector TargetVector);
-	void TickAcceleration(float DeltaTime, FVector Direction);
+	void TickAcceleration(float DeltaTime, FVector Direction, float InputAmountNormalized = 1.0f);
 	void TickDeceleration(float DeltaTime);
 	void Update();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float MovementAngleDegrees;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
+	float TargetRotationAmountDegrees = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float Deceleration;
@@ -64,6 +67,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float NormalizedJumpProgress;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
+	float MovementAmountNormalized = 0.0f;
+
 	
 private:
 	FQuat UpdatedActorRotation;

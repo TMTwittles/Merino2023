@@ -41,6 +41,11 @@ void UFootIKSolverComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 void UFootIKSolverComponent::GroundFoot(TEnumAsByte<EIKBone> Key)
 {
+	if (bIKActive == false)
+	{
+		return;
+	}
+
 	if (AffectedBones.Contains(Key) == false)
 	{
 		return;
@@ -50,6 +55,11 @@ void UFootIKSolverComponent::GroundFoot(TEnumAsByte<EIKBone> Key)
 
 void UFootIKSolverComponent::ReleaseFoot(TEnumAsByte<EIKBone> Key)
 {
+	if (bIKActive == false)
+	{
+		return;
+	}
+
 	if (AffectedBones.Contains(Key) == false)
 	{
 		return;
@@ -59,6 +69,11 @@ void UFootIKSolverComponent::ReleaseFoot(TEnumAsByte<EIKBone> Key)
 
 void UFootIKSolverComponent::TickFootAlphas(float DeltaTime)
 {
+	if (bIKActive == false)
+	{
+		return;
+	}
+
 	if (AffectedBones.Num() == 0)
 	{
 		return;

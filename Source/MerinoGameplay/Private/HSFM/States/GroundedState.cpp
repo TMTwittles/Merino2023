@@ -1,6 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "HSFM/States/GroundedState.h"
 #include "CharacterMovement/MerinoMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "MerinoLogStatics.h"
 
 UGroundedState::~UGroundedState()
 {
@@ -17,12 +19,15 @@ void UGroundedState::TickState(float DeltaTime)
 	FVector InputVector = MovementComponent->ConsumeInputVector();
 	if (InputVector != FVector::Zero())
 	{
-		MovementComponent->TickAcceleration(DeltaTime, InputVector);
-		MovementComponent->TickRotateToVector(DeltaTime, MovementComponent->Velocity.GetSafeNormal());
+		float InputAmountNormalized = UKismetMathLibrary::NormalizeToRange(InputVector.Size(), 0.0f, 1.0f);
+		FVector InputVectorNormalized = InputVector.GetSafeNormal();
+		MovementComponent->TickAcceleration(DeltaTime, InputVectorNormalized, InputAmountNormalized);
+		MovementComponent->TickRotateToVector(DeltaTime, InputVectorNormalized);
 	}
 	else
 	{
 		MovementComponent->TickDeceleration(DeltaTime);
 	}
 	MovementComponent->Update();
+	UMerinoLogStatics::LogFloat("Movement amount: ", MovementComponent->Velocity.Size());
 }
