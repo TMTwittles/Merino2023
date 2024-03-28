@@ -39,9 +39,9 @@ private:
 
 private:
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="True"))
-	TArray<UStateData*> StateDatas;
+	TArray<TObjectPtr<UStateData>> StateDatas;
 	UPROPERTY()
-	UMerinoState* ActiveState;
+	TObjectPtr<UMerinoState> ActiveState;
 	UPROPERTY()
 	TMap<TEnumAsByte<EMerinoStateID>, UMerinoState*> States;
 	UPROPERTY()

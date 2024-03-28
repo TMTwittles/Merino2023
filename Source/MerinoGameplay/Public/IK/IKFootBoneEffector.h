@@ -33,16 +33,25 @@ private:
 	void TickEnterReleaseIK(float DeltaTime);
 private:
 	UPROPERTY()
-	UWorld* World;
+	TObjectPtr<UWorld> World;
 	UPROPERTY()
-	USkeletalMeshComponent* SkeletalMeshComponent;
+	TObjectPtr<USkeletalMeshComponent> SkeletalMeshComponent;
+	UPROPERTY()
 	FName BoneName;
-	EIKState CurrentState;
+	UPROPERTY()
+	TEnumAsByte<EIKState> CurrentState;
+	UPROPERTY()
 	float IKAlpha;
+	UPROPERTY()
 	float IKCheckDistance;
+	UPROPERTY()
 	FVector EffectorLocation;
+	UPROPERTY()
 	float ElapsedIKAlpaTickTime;
+	UPROPERTY()
 	float EnterIKAlphaSpeed;
+	UPROPERTY()
 	float ReleaseIKAlphaSpeed;
+	UPROPERTY()
 	float FootPositionAdjustmentAmount;
 };

@@ -37,9 +37,9 @@ public:
 private:
 
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"))
-	UCameraComponent* Camera;
+	TObjectPtr<UCameraComponent> Camera;
 	
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"))
-	UCameraMovementComponent* CameraMovementComponent;
+	TObjectPtr<UCameraMovementComponent> CameraMovementComponent;
 
 };

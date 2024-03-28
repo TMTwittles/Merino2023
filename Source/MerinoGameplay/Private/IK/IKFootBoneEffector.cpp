@@ -1,8 +1,5 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "IK/IKFootBoneEffector.h"
-
-#include "MerinoDebugStatics.h"
-#include "MerinoLogStatics.h"
 #include "IK/IKState.h"
 
 UIKFootBoneEffector::UIKFootBoneEffector()
@@ -51,12 +48,10 @@ void UIKFootBoneEffector::Tick(float DeltaTime)
 {
 	if (CurrentState == EnteringActive)
 	{
-		//UMerinoLogStatics::LogFloat("Entering active: ", IKAlpha);
 		TickEnterActiveIK(DeltaTime);
 	}
 	else if (CurrentState == EnteringInactive)
 	{
-		UMerinoLogStatics::LogFloat("Entering inactive: ", IKAlpha);
 		TickEnterReleaseIK(DeltaTime);
 	}
 }
@@ -82,7 +77,6 @@ FVector UIKFootBoneEffector::CalculateEffectorLocation()
 	if (bHit)
 	{
 		FootPosition = HitResult.ImpactPoint + HitResult.ImpactNormal * FootPositionAdjustmentAmount;
-		UMerinoDebugStatics::DrawDebugSphereForDuration(World, FootPosition, 10.0f, FColor::Red, 10.0f);
 	}
 	return FootPosition;
 }
@@ -95,7 +89,6 @@ float UIKFootBoneEffector::GetTickIKAlphaValue(float DeltaTime, float Speed) con
 void UIKFootBoneEffector::TickEnterActiveIK(float DeltaTime)
 {
 	IKAlpha += GetTickIKAlphaValue(DeltaTime, EnterIKAlphaSpeed);
-	UMerinoLogStatics::LogFloat("Ground IK Alpha: ", IKAlpha);
 	if (IKAlpha >= 1.0f)
 	{
 		CurrentState = Active;
@@ -106,8 +99,6 @@ void UIKFootBoneEffector::TickEnterActiveIK(float DeltaTime)
 void UIKFootBoneEffector::TickEnterReleaseIK(float DeltaTime)
 {
 	IKAlpha -= GetTickIKAlphaValue(DeltaTime, EnterIKAlphaSpeed);
-	UMerinoLogStatics::LogFloat("Release IK Alpha: ", GetTickIKAlphaValue(DeltaTime, EnterIKAlphaSpeed));
-	UMerinoLogStatics::LogFloat("Release IK Alpha: ", IKAlpha);
 	if (IKAlpha <= 0.0f)
 	{
 		CurrentState = Inactive;

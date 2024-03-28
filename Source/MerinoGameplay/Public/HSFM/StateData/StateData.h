@@ -8,9 +8,6 @@
 #include "HSFM/States/MerinoState.h"
 #include "StateData.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class MERINOGAMEPLAY_API UStateData : public UDataAsset
 {
@@ -24,5 +21,5 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UMerinoState> State;
 	UPROPERTY(EditAnywhere)
-	TArray<UTransitionData*> Transitions;
+	TArray<TObjectPtr<UTransitionData>> Transitions;
 };

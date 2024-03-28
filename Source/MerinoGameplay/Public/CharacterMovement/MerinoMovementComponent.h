@@ -5,13 +5,6 @@
 #include "GameFramework/PawnMovementComponent.h"
 #include "MerinoMovementComponent.generated.h"
 
-enum EStateID : int;
-class UMerinoMovementState;
-class UGroundedMovementState;
-class ADynamicMovingCamera;
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMovementStateChanged);
-
 UCLASS(ClassGroup=Movement, meta=(BlueprintSpawnableComponent))
 class MERINOGAMEPLAY_API UMerinoMovementComponent : public UPawnMovementComponent
 {
@@ -68,18 +61,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float NormalizedJumpProgress;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
-	float MovementAmountNormalized = 0.0f;
-
-	
 private:
-	FQuat UpdatedActorRotation;
-	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="True"))
-	TEnumAsByte<EStateID> ActiveMovementStateKey;
-	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="True"))
-	UMerinoMovementState* ActiveMovementState;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="True"))
-	TMap<TEnumAsByte<EStateID>, UMerinoMovementState*> MovementStateMap;
 	UPROPERTY()
-	FVector LastActiveVelocity;
+	FQuat UpdatedActorRotation;
 };

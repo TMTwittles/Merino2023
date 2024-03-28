@@ -54,11 +54,13 @@ private:
 	FIKInfo RightFootBone;
 	
 	UPROPERTY()
-	TMap<TEnumAsByte<EIKBone>, UIKFootBoneEffector*> AffectedBones;
+	TMap<TEnumAsByte<EIKBone>, TObjectPtr<UIKFootBoneEffector>> AffectedBones;
 	UPROPERTY()
-	USkeletalMeshComponent* SkeletalMeshComponent;
+	TObjectPtr<USkeletalMeshComponent> SkeletalMeshComponent;
 	UPROPERTY()
-	UMerinoMovementComponent* MovementComponent;
+	TObjectPtr<UMerinoMovementComponent> MovementComponent;
+	UPROPERTY()
 	FVector CurrentFootPosition;
+	UPROPERTY()
 	FVector NewFootPosition;
 };
