@@ -29,7 +29,7 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="True"), Category="Affected IK Bones")
 	FIKInfo PelvisBone;
-
+	UPROPERTY()
 	FVector PelvisDisplacement;
 
 		

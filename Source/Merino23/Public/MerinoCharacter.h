@@ -58,24 +58,24 @@ protected:
 
 public:
 	UPROPERTY(Category=Movement, EditAnywhere, BlueprintReadWrite)
-	UMerinoMovementComponent* Movement;
+	TObjectPtr<UMerinoMovementComponent> Movement;
 
 	UPROPERTY(Category=StateMachine, EditAnywhere, BlueprintReadWrite)
-	UMerinoStateMachineComponent* StateMachineComponent;
+	TObjectPtr<UMerinoStateMachineComponent> StateMachineComponent;
 	
 	UPROPERTY(Category=IK, EditAnywhere, BlueprintReadWrite)
-	UFootIKSolverComponent* FootIKSolver;
+	TObjectPtr<UFootIKSolverComponent> FootIKSolver;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
-	ADynamicMovingCamera* SpawnedCamera;
+	TObjectPtr<ADynamicMovingCamera> SpawnedCamera;
 
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"));
 	TSubclassOf<ADynamicMovingCamera> Camera;  
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess="true"))
-	UCapsuleComponent* CapsuleCollider;
+	TObjectPtr<UCapsuleComponent> CapsuleCollider;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess="true"))
-	USkeletalMeshComponent* Mesh;
+	TObjectPtr<USkeletalMeshComponent> Mesh;
 };

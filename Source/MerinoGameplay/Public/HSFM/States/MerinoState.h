@@ -33,11 +33,11 @@ protected:
 
 protected:
 	UPROPERTY()
-	UWorld* World;
+	TObjectPtr<UWorld> World;
 
 private:
 	UPROPERTY()
-	TArray<UTransition*> Transitions;
+	TArray<TObjectPtr<UTransition>> Transitions;
 	UPROPERTY()
 	TEnumAsByte<EMerinoStateID> StateID;
 };

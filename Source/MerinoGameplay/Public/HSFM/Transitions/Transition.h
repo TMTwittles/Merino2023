@@ -31,9 +31,9 @@ protected:
 
 private:
 	UPROPERTY()
-	UTransitionRule* TransitionRule;
+	TObjectPtr<UTransitionRule> TransitionRule;
 	UPROPERTY()
-	UMerinoStateMachineComponent* StateMachineComponent;
+	TObjectPtr<UMerinoStateMachineComponent> StateMachineComponent;
 	UPROPERTY()
-	UMerinoState* TransitionState;
+	TObjectPtr<UMerinoState> TransitionState;
 };
