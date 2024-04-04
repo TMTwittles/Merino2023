@@ -1,9 +1,11 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "HSFM\MerinoStateMachineComponent.h"
-#include "..\..\Public\HSFM\States\MerinoState.h"
+#include "HSFM\States\MerinoState.h"
 #include "HSFM\StateData\StateData.h"
 #include "HSFM\Transitions\TransitionRule.h"
 #include "HSFM\Transitions\Transition.h"
+#include "HSFM\StateProperties\MerinoStateProperties.h"
+#include "HSFM\StateProperties\StatePropertyDataReader.h"
 #include "HSFM\MerinoStateID.h"
 
 // Sets default values for this component's properties
@@ -24,25 +26,29 @@ void UMerinoStateMachineComponent::BeginPlay()
 
 void UMerinoStateMachineComponent::ConstructStates()
 {
-	// We first construct each state, no transitions.
+	// We first construct each state.
 	for (UStateData* StateData : StateDatas)
 	{
-		UMerinoState* ConstructedState = NewObject<UMerinoState>(this, StateData->State, StateData->StateName);
+		TObjectPtr<UMerinoState> ConstructedState = NewObject<UMerinoState>(this, StateData->State, StateData->StateName);
 		EMerinoStateID StateID = StateData->StateID;
-		ConstructedState->Initialize(StateID, GetOwner(), GetWorld());
+		TObjectPtr<UMerinoStateProperties> StateProperties = NewObject<UMerinoStateProperties>();
+		StateProperties->Initialize(StateID);
+		UStatePropertyDataReader::ReadFromGlobalStateProperties(GlobalStateProperties, StateProperties);
+		ConstructedState->Initialize(StateID, GetOwner(), GetWorld(), StateProperties);
 		States.Add(StateID, ConstructedState);
 	}
-
+	
 	// Once all states have been constructed, build and add transitions to the constructed
 	// states. 
 	for (UStateData* StateData : StateDatas)
 	{
 		UMerinoState* State = States[StateData->StateID];
+
 		for (UTransitionData* TransitionData : StateData->Transitions)
 		{
-			UTransition* Transition = NewObject<UTransition>();
-			UTransitionRule* TransitionRule = NewObject<UTransitionRule>(TransitionData->TransitionRule);
-			UMerinoState* TransitionState = States[TransitionData->TransitionStateID];
+			TObjectPtr<UTransition> Transition = NewObject<UTransition>();
+			TObjectPtr<UTransitionRule> TransitionRule = NewObject<UTransitionRule>(TransitionData->TransitionRule);
+			TObjectPtr<UMerinoState> TransitionState = States[TransitionData->TransitionStateID];
 			Transition->InitializeTransition(this, TransitionRule, TransitionState);
 			State->AddTransition(Transition);
 		}

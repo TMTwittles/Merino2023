@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "HSFM/StateProperties/StatePropertyEntry.h"
 #include "MerinoStateMachineComponent.generated.h"
 
 enum EMerinoStateID : int;
@@ -38,12 +39,14 @@ private:
 	void ConstructStates();
 
 private:
-	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="True"))
+	UPROPERTY(EditAnywhere, Category = "State data", meta = (AllowPrivateAccess = "True"))
+	TObjectPtr<UDataTable> GlobalStateProperties;
+	UPROPERTY(EditAnywhere, Category = "State data", meta=(AllowPrivateAccess="True"))
 	TArray<TObjectPtr<UStateData>> StateDatas;
 	UPROPERTY()
 	TObjectPtr<UMerinoState> ActiveState;
 	UPROPERTY()
-	TMap<TEnumAsByte<EMerinoStateID>, UMerinoState*> States;
+	TMap<TEnumAsByte<EMerinoStateID>, TObjectPtr<UMerinoState>> States;
 	UPROPERTY()
 	int ActiveStateIndex = 0;
 };

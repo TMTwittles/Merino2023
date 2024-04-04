@@ -52,7 +52,7 @@ void UJumpingMovementState::ApplyHorizontalAirControl(float DeltaTime)
 	}
 	if (InputDirection != FVector::Zero())
 	{
-		MovementComponent->TickRotateToVector(DeltaTime, InputDirection);
+		//MovementComponent->TickRotateToVector(DeltaTime, InputDirection);
 	}
 }
 

@@ -4,5 +4,7 @@
 UENUM(BlueprintType)
 enum EMerinoStateID
 {
-	Ground UMETA(DisplayName = "Grounded")
+	Ground UMETA(DisplayName = "Grounded"),
+	Falling UMETA(DisplayName = "Falling"),
+	Jumping UMETA(DisplayName = "Jumping")
 };

@@ -18,7 +18,7 @@ const bool UMerinoMovementComponent::CharacterGrounded()
 	return bHit;
 }
 
-void UMerinoMovementComponent::TickRotateToVector(float DeltaTime, FVector TargetVector)
+void UMerinoMovementComponent::TickRotateToVector(const float DeltaTime, const FVector TargetVector)
 {
 	FVector ActorForwardVector = GetOwner()->GetActorForwardVector();
 	float TargetRotationAmount = UMerinoMathStatics::GetSignedAngleBetweenTwoVectorsRelativeToAxis
@@ -27,21 +27,21 @@ void UMerinoMovementComponent::TickRotateToVector(float DeltaTime, FVector Targe
 		TargetVector,
 		GetOwner()->GetActorUpVector());
 	TargetRotationAmountDegrees = FMath::RadiansToDegrees(TargetRotationAmount);
-	float TickRotationAmount = FMath::Lerp(0.0f, TargetRotationAmount, DeltaTime) * AngularRotationSpeed;
+	float TickRotationAmount = FMath::Lerp(0.0f, TargetRotationAmount, DeltaTime) * AngularAcceleration;
 	FQuat CurrentActorRotation = GetOwner()->GetActorRotation().Quaternion();
 	FQuat TickRotation = FQuat(GetOwner()->GetActorUpVector(), TickRotationAmount);
 	UpdatedActorRotation = CurrentActorRotation * TickRotation;
 }
 
 // TODO: Add input amount to the calculations.
-void UMerinoMovementComponent::TickAcceleration(float DeltaTime, FVector Direction, float InputAmountNormalized)
+void UMerinoMovementComponent::TickAcceleration(const FVector Direction, const float InputAmountNormalized)
 {
 	FVector NewVelocity = Velocity + Direction * Acceleration;
 	NewVelocity = NewVelocity.GetClampedToSize(0.0f, MaxSpeed);
 	Velocity = NewVelocity;
 }
 
-void UMerinoMovementComponent::TickDeceleration(float DeltaTime)
+void UMerinoMovementComponent::TickDeceleration(const float DeltaTime)
 {
 	// Already slowed down. No need.
 	if (Velocity == FVector::Zero())

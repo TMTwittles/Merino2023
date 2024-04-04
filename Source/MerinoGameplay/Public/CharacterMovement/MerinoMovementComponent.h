@@ -14,9 +14,9 @@ public:
 	virtual void BeginPlay() override;
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	const bool CharacterGrounded();
-	void TickRotateToVector(float DeltaTime, FVector TargetVector);
-	void TickAcceleration(float DeltaTime, FVector Direction, float InputAmountNormalized = 1.0f);
-	void TickDeceleration(float DeltaTime);
+	void TickRotateToVector(const float DeltaTime, FVector TargetVector);
+	void TickAcceleration(const FVector Direction, const float InputAmountNormalized = 1.0f);
+	void TickDeceleration(const float DeltaTime);
 	void Update();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
@@ -26,13 +26,16 @@ public:
 	float TargetRotationAmountDegrees = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
-	float Deceleration;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
-	float Acceleration;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float MaxSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MovementAttributes)
+	float Acceleration;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MovementAttributes)
+	float Deceleration;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MovementAttributes)
+	float AngularAcceleration;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float CheckGroundLineTraceDistance;
@@ -42,9 +45,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float MaxFallingSpeed;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
-	float AngularRotationSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MovementAttributes)
 	float MaxJumpHeight;
