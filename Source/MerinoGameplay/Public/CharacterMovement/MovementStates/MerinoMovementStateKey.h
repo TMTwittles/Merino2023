@@ -5,7 +5,7 @@ UENUM(BlueprintType)
 enum EStateID
 {
 	Grounded UMETA(DisplayName = "Grounded"),
-	Falling UMETA(DisplayName = "Falling"),
-	Jumping UMETA(DisplayName = "Jumping"),
-	Strafing UMETA(DisplayName = "Strafing")
+	Falling__ UMETA(DisplayName = "Falling__"),
+	Jumping__ UMETA(DisplayName = "Jumping__"),
+	Strafing__ UMETA(DisplayName = "Strafing__")
 };

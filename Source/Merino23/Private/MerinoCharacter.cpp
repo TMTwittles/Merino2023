@@ -2,6 +2,7 @@
 #include "MerinoCharacter.h"
 #include "MerinoMathStatics.h"
 #include "DynamicMovingCamera.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "CharacterMovement/MerinoMovementComponent.h"
 #include "CharacterMovement/MovementStateControllerComponent.h"
 #include "CharacterMovement/MovementStates/MerinoMovementStateKey.h"
@@ -11,6 +12,8 @@
 #include "Components/CapsuleComponent.h"
 #include "IK/FootIKSolverComponent.h"
 #include "HSFM/MerinoStateMachineComponent.h"
+#include "RegisteredActionsComponent.h"
+#include "RegisteredActionID.h"
 
 // Sets default values
 AMerinoCharacter::AMerinoCharacter()
@@ -19,8 +22,12 @@ AMerinoCharacter::AMerinoCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Build actor components
+	CharacterMovementComponent = CreateDefaultSubobject<UCharacterMovementComponent>("Character movement component");
 	Movement = CreateDefaultSubobject<UMerinoMovementComponent>("MovementComponent");
 	FootIKSolver = CreateDefaultSubobject<UFootIKSolverComponent>("FootIKSolverComponent");
+	RegisteredActionsComponent = CreateDefaultSubobject<URegisteredActionsComponent>("RegisteredActionComponent");
+	RegisteredActionsComponent->SetComponentTickEnabled(true);
+	RegisteredActionsComponent->PrimaryComponentTick.bCanEverTick = true;
 	StateMachineComponent = CreateDefaultSubobject<UMerinoStateMachineComponent>("StateMachineComponent");
 	StateMachineComponent->SetComponentTickEnabled(true);
 	StateMachineComponent->PrimaryComponentTick.bCanEverTick = true;
@@ -86,18 +93,6 @@ void AMerinoCharacter::AddControllerCameraYawInput(float YawInput)
 
 void AMerinoCharacter::AddControllerJumpInput()
 {
-	//MovementStateController->SetActiveMovementState(Jumping);
-}
-
-void AMerinoCharacter::EnterLockOn()
-{
-	/*if (MovementStateController->GetActiveMovementState()->BehaviourController->ContainsBehaviour(LockOn))
-	{
-		MovementStateController->GetActiveMovementState()->BehaviourController->GetBehaviour<ULockOnMovementStateBehaviour>(LockOn)->SetActive(true);
-	}*/
-}
-
-void AMerinoCharacter::ReleaseLockOn()
-{
+	RegisteredActionsComponent->RegisterAction(JumpAction);
 }
 

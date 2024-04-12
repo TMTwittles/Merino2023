@@ -3,12 +3,18 @@
 #include "HSFM/Transitions/TransitionRule.h"
 
 
-void UTransition::InitializeTransition(UMerinoStateMachineComponent* InStateMachineComponent, UTransitionRule* InTransitionRule, UMerinoState* InTransitionState)
+void UTransition::InitializeTransition(UMerinoStateMachineComponent* InStateMachineComponent, TArray<TSubclassOf<UTransitionRule>>* InTransitionRuleClasses, UMerinoState* InTransitionState)
 {
-	TransitionRule = InTransitionRule;
 	StateMachineComponent = InStateMachineComponent;
 	TransitionState = InTransitionState;
-	TransitionRule->ConfigureTransitionRule(StateMachineComponent->GetOwner());
+
+	// Build transition rules.
+	for (TSubclassOf<UTransitionRule> TransitionRuleClass : *InTransitionRuleClasses)
+	{
+		TObjectPtr<UTransitionRule> TransitionRule = NewObject<UTransitionRule>(this, TransitionRuleClass);
+		TransitionRule->ConfigureTransitionRule(StateMachineComponent->GetOwner());
+		TransitionRules.Add(TransitionRule);
+	}
 }
 
 void UTransition::Transition()
@@ -16,10 +22,22 @@ void UTransition::Transition()
 	StateMachineComponent->TransitionToState(TransitionState);
 }
 
-void UTransition::TickTransition(float DeltaTime)
+void UTransition::TickTransition(float DeltaTime, UWorld* World)
 {
-	TransitionRule->TickTransitionRule(DeltaTime);
-	if (TransitionRule->ShouldTransition())
+	// In order to transition all transition rules must be met.
+	bool bShouldTransition = true;
+	for (UTransitionRule* TransitionRule : TransitionRules)
+	{
+		if (bShouldTransition == false)
+		{
+			break;
+		}
+
+		TransitionRule->TickTransitionRule(DeltaTime, World);
+		bShouldTransition = TransitionRule->ShouldTransition();
+	}
+	
+	if (bShouldTransition)
 	{
 		Transition();
 	}

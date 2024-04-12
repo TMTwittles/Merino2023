@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "HSFM/StateProperties/StatePropertyEntry.h"
 #include "MerinoStateMachineComponent.generated.h"
 
 enum EMerinoStateID : int;
@@ -24,26 +25,35 @@ public:
 	UMerinoStateMachineComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	void TransitionToState(UMerinoState* TransitionState);
+	UFUNCTION(BlueprintCallable)
+	UMerinoState* GetState(EMerinoStateID StateID);
 
-	// Events
-	UPROPERTY(BlueprintAssignable)
-	FOnStatesInitialized OnStatesInitialized;
-	UPROPERTY(BlueprintAssignable)
-	FOnActiveStateChanged OnActiveStateChanged;
-	
+
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	void ConstructStates();
+	void SetStatesInitialized();
+
+public:
+	// Events
+	UPROPERTY(BlueprintAssignable)
+	FOnStatesInitialized OnStatesInitialized;
+	UPROPERTY(BlueprintAssignable)
+	FOnActiveStateChanged OnActiveStateChanged;
 
 private:
-	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="True"))
+	UPROPERTY()
+	bool bStatesInitialized = false;
+	UPROPERTY(EditAnywhere, Category = "State data", meta = (AllowPrivateAccess = "True"))
+	TObjectPtr<UDataTable> GlobalStateProperties;
+	UPROPERTY(EditAnywhere, Category = "State data", meta=(AllowPrivateAccess="True"))
 	TArray<TObjectPtr<UStateData>> StateDatas;
 	UPROPERTY()
 	TObjectPtr<UMerinoState> ActiveState;
 	UPROPERTY()
-	TMap<TEnumAsByte<EMerinoStateID>, UMerinoState*> States;
+	TMap<TEnumAsByte<EMerinoStateID>, TObjectPtr<UMerinoState>> States;
 	UPROPERTY()
 	int ActiveStateIndex = 0;
 };

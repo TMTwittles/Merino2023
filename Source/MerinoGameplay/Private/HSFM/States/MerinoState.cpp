@@ -2,12 +2,13 @@
 #include "HSFM/States/MerinoState.h"
 #include "HSFM/Transitions/Transition.h"
 #include "HSFM/MerinoStateID.h"
+#include "HSFM/StateProperties/MerinoStateProperties.h"
 
-void UMerinoState::Initialize(EMerinoStateID InStateID, AActor* InOwner, UWorld* InWorld)
+void UMerinoState::Initialize(EMerinoStateID InStateID, AActor* InOwner, UWorld* InWorld, UMerinoStateProperties* InStateProperties)
 {
 	StateID = InStateID;
 	World = InWorld;
-	PostInitialise(InOwner);
+	PostInitialise(InOwner, InStateProperties);
 }
 
 void UMerinoState::AddTransition(UTransition* InTransition)
@@ -15,7 +16,12 @@ void UMerinoState::AddTransition(UTransition* InTransition)
 	Transitions.Add(InTransition);
 }
 
-void UMerinoState::PostInitialise(AActor* InOwner)
+TArray<TObjectPtr<UTransition>>* UMerinoState::GetTransitions()
+{
+	return &Transitions;
+}
+
+void UMerinoState::PostInitialise(AActor* InOwner, UMerinoStateProperties* InStateProperties)
 {
 }
 
@@ -34,14 +40,4 @@ void UMerinoState::EnterState()
 EMerinoStateID UMerinoState::GetStateID() const
 {
 	return StateID;
-}
-
-UMerinoState::~UMerinoState()
-{
-	World = nullptr;
-	for (UTransition* Transition : Transitions)
-	{
-		delete Transition;
-	}
-	Transitions.Empty();
 }

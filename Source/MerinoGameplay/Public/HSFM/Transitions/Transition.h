@@ -22,16 +22,16 @@ class MERINOGAMEPLAY_API UTransition : public UObject
 public:
 	void InitializeTransition(
 		UMerinoStateMachineComponent* InStateMachineComponent,
-		UTransitionRule* InTransitionRule,
+		TArray<TSubclassOf<UTransitionRule>>* InTransitionRuleClasses,
 		UMerinoState* InTransitionState);
-
+	virtual void TickTransition(float DeltaTime, UWorld* World);
 protected:
 	void Transition();
-	virtual void TickTransition(float DeltaTime);
+	
 
 private:
 	UPROPERTY()
-	TObjectPtr<UTransitionRule> TransitionRule;
+	TArray<TObjectPtr<UTransitionRule>> TransitionRules;
 	UPROPERTY()
 	TObjectPtr<UMerinoStateMachineComponent> StateMachineComponent;
 	UPROPERTY()

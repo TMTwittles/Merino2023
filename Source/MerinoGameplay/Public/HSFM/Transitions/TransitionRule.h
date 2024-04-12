@@ -8,7 +8,7 @@
 /**
  * 
  */
-UCLASS(Blueprintable, Abstract)
+UCLASS(Blueprintable)
 class MERINOGAMEPLAY_API UTransitionRule : public UObject
 {
 	GENERATED_BODY()
@@ -18,9 +18,9 @@ public:
 	bool ShouldTransition();
 	UFUNCTION(BlueprintCallable)
 	void SetShouldTransition(bool bInShouldTransition);
-	UFUNCTION(BlueprintNativeEvent)
-	void TickTransitionRule(float DeltaTime);
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void TickTransitionRule(float DeltaTime, UWorld* World);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void ConfigureTransitionRule(AActor* InOwner);
 protected:
 	bool bShouldTransition = false;

@@ -8,7 +8,9 @@
 #include "MerinoCharacter.generated.h"
 
 class UMerinoStateMachineComponent;
+class URegisteredActionsComponent;
 class UFootIKSolverComponent;
+class UCharacterMovementComponent;
 enum EStateID : int;
 class UMerinoMovementState;
 class UGroundedMovementState;
@@ -45,18 +47,14 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void AddControllerJumpInput();
-
-	UFUNCTION(BlueprintCallable)
-	void EnterLockOn();
-
-	UFUNCTION(BlueprintCallable)
-	void ReleaseLockOn();
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
+	UPROPERTY(Category = Movement, EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UCharacterMovementComponent> CharacterMovementComponent;
+
 	UPROPERTY(Category=Movement, EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UMerinoMovementComponent> Movement;
 
@@ -66,6 +64,8 @@ public:
 	UPROPERTY(Category=IK, EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UFootIKSolverComponent> FootIKSolver;
 
+	UPROPERTY(Category=ActionRegistration, EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<URegisteredActionsComponent> RegisteredActionsComponent;
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
 	TObjectPtr<ADynamicMovingCamera> SpawnedCamera;

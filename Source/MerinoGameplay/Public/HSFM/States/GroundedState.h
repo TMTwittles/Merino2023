@@ -2,24 +2,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MerinoState.h"
+#include "MovementState.h"
 #include "GroundedState.generated.h"
 
-class UMerinoMovementComponent;
 /**
  * 
  */
 UCLASS()
-class MERINOGAMEPLAY_API UGroundedState : public UMerinoState
+class MERINOGAMEPLAY_API UGroundedState : public UMovementState
 {
 	GENERATED_BODY()
 	
 public:
 	virtual void TickState(float DeltaTime) override;
-
-protected:
-	virtual void PostInitialise(AActor* Owner) override;
-
-private:
-	TObjectPtr<UMerinoMovementComponent> MovementComponent;
+	virtual void EnterState();
 };

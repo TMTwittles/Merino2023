@@ -26,10 +26,10 @@ void UGroundedMovementState::OnEnter()
 
 float UGroundedMovementState::CalculateNormalizedElapsedDecelerationTime()
 {
-	float TotalDecelerationTime = (float)LastActiveVelocity.Size() / MovementComponent->Deceleration;
-	float ElapsedDecelerationTime = (MovementComponent->Velocity.Size() - MovementComponent->Deceleration) / MovementComponent->Deceleration;
-	ElapsedDecelerationTime = TotalDecelerationTime - ElapsedDecelerationTime;
-	return ElapsedDecelerationTime / TotalDecelerationTime;
+	//float TotalDecelerationTime = (float)LastActiveVelocity.Size() / MovementComponent->Deceleration;
+	//float ElapsedDecelerationTime = (MovementComponent->Velocity.Size() - MovementComponent->Deceleration) / MovementComponent->Deceleration;
+	//ElapsedDecelerationTime = TotalDecelerationTime - ElapsedDecelerationTime;
+	return 0.0f;
 }
 
 void UGroundedMovementState::StickToGround()
@@ -51,7 +51,7 @@ void UGroundedMovementState::Tick(float DeltaTime)
 	// Set movement state to grounded if 
 	if (MovementComponent->CharacterGrounded() == false)
 	{
-		Controller->SetActiveMovementState(Falling);
+		//Controller->SetActiveMovementState(Falling);
 		return;
 	}
 
@@ -60,7 +60,7 @@ void UGroundedMovementState::Tick(float DeltaTime)
 	if (CurrentInputVector != FVector::Zero())
 	{
 //		MovementComponent->TickVelocity(DeltaTime, CurrentInputVector);
-		MovementComponent->TickRotateToVector(DeltaTime, ClampedVelocity);
+		//MovementComponent->TickRotateToVector(DeltaTime, ClampedVelocity);
 	}
 	else
 	{
@@ -76,7 +76,7 @@ void UGroundedMovementState::Tick(float DeltaTime)
 		float Alpha = CalculateNormalizedElapsedDecelerationTime();
 		ClampedVelocity = FMath::Lerp(MovementComponent->Velocity, FVector::Zero(), Alpha);
 	}
-	ClampedVelocity = ClampedVelocity.GetClampedToSize(0.0f, MovementComponent->MaxSpeed);
+	//ClampedVelocity = ClampedVelocity.GetClampedToSize(0.0f, MovementComponent->MaxSpeed);
 	MovementComponent->Velocity = ClampedVelocity;
 	MovementComponent->UpdateComponentVelocity();
 //	MovementComponent->MoveUpdatedComponent(MovementComponent->Velocity, MovementComponent->UpdatedActorRotation, false);
