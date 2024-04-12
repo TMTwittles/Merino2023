@@ -6,17 +6,22 @@
 
 void UMovementState::PostInitialise(AActor* InOwner, UMerinoStateProperties* InStateProperties)
 {
-	MovementComponent = InOwner->GetComponentByClass<UMerinoMovementComponent>();
+	/*MovementComponent = InOwner->GetComponentByClass<UMerinoMovementComponent>();
 	Acceleration = InStateProperties->GetFloatProperty("Acceleration");
 	Deceleration = InStateProperties->GetFloatProperty("Deceleration");
 	MaxSpeed = InStateProperties->GetFloatProperty("Max speed");
 	AngularAcceleration = InStateProperties->GetFloatProperty("Angular Acceleration");
+	Gravity = InStateProperties->GetFloatProperty("Gravity");
+	MaxFallingSpeed = InStateProperties->GetFloatProperty("Max falling speed");
+	MinimumJumpAnglePercentage = InStateProperties->GetFloatProperty("Minimum jump angle percentage");*/
 }
 
 void UMovementState::EnterState()
 {
-	MovementComponent->Acceleration = Acceleration;
+	/*MovementComponent->Acceleration = Acceleration;
 	MovementComponent->Deceleration = Deceleration;
 	MovementComponent->MaxSpeed = MaxSpeed;
 	MovementComponent->AngularAcceleration = AngularAcceleration;
+	MovementComponent->Gravity = Gravity;
+	MovementComponent->MaxFallingSpeed = MaxFallingSpeed;*/
 }

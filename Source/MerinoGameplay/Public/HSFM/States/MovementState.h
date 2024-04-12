@@ -36,5 +36,14 @@ protected:
 	float MaxSpeed;
 
 	UPROPERTY()
+	float Gravity;
+
+	UPROPERTY()
+	float MaxFallingSpeed;
+
+	UPROPERTY()
+	float MinimumJumpAnglePercentage;
+
+	UPROPERTY()
 	TObjectPtr<UMerinoMovementComponent> MovementComponent;
 };

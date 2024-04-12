@@ -6,6 +6,7 @@
 #include "HSFM\Transitions\Transition.h"
 #include "HSFM\StateProperties\MerinoStateProperties.h"
 #include "HSFM\StateProperties\StatePropertyDataReader.h"
+#include "MerinoLogStatics.h"
 #include "HSFM\MerinoStateID.h"
 
 // Sets default values for this component's properties
@@ -14,6 +15,7 @@ UMerinoStateMachineComponent::UMerinoStateMachineComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+	bStatesInitialized = false;
 }
 
 
@@ -31,7 +33,7 @@ void UMerinoStateMachineComponent::ConstructStates()
 	{
 		TObjectPtr<UMerinoState> ConstructedState = NewObject<UMerinoState>(this, StateData->State, StateData->StateName);
 		EMerinoStateID StateID = StateData->StateID;
-		TObjectPtr<UMerinoStateProperties> StateProperties = NewObject<UMerinoStateProperties>();
+		TObjectPtr<UMerinoStateProperties> StateProperties = NewObject<UMerinoStateProperties>(ConstructedState);
 		StateProperties->Initialize(StateID);
 		UStatePropertyDataReader::ReadFromGlobalStateProperties(GlobalStateProperties, StateProperties);
 		ConstructedState->Initialize(StateID, GetOwner(), GetWorld(), StateProperties);
@@ -46,18 +48,30 @@ void UMerinoStateMachineComponent::ConstructStates()
 
 		for (UTransitionData* TransitionData : StateData->Transitions)
 		{
-			TObjectPtr<UTransition> Transition = NewObject<UTransition>();
-			TObjectPtr<UTransitionRule> TransitionRule = NewObject<UTransitionRule>(TransitionData->TransitionRule);
+			if (States.Contains(TransitionData->TransitionStateID) == false)
+			{
+				UMerinoLogStatics::LogError(TEXT("Error: Trying to create transition to state {0} but no state for this ID exists."),
+					{ UEnum::GetValueAsString(TransitionData->TransitionStateID.GetValue()) });
+				return;
+			}
+			
+			TObjectPtr<UTransition> Transition = NewObject<UTransition>(State);
 			TObjectPtr<UMerinoState> TransitionState = States[TransitionData->TransitionStateID];
-			Transition->InitializeTransition(this, TransitionRule, TransitionState);
+			Transition->InitializeTransition(this, &TransitionData->TransitionRules, TransitionState);
 			State->AddTransition(Transition);
 		}
 	}
-
-	OnStatesInitialized.Broadcast();
+	
+	SetStatesInitialized();
 	
 	// Set default active state to arbitrary first state. 
 	TransitionToState(States[StateDatas[0]->StateID]);
+}
+
+void UMerinoStateMachineComponent::SetStatesInitialized()
+{
+	bStatesInitialized = true;
+	OnStatesInitialized.Broadcast();
 }
 
 
@@ -68,6 +82,11 @@ void UMerinoStateMachineComponent::TickComponent(float DeltaTime, ELevelTick Tic
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (ActiveState != nullptr)
 	{
+		for (UTransition* ActiveStateTransition : *ActiveState->GetTransitions())
+		{
+			ActiveStateTransition->TickTransition(DeltaTime, GetWorld());
+		}
+
 		ActiveState->TickState(DeltaTime);
 	}
 }
@@ -81,6 +100,23 @@ void UMerinoStateMachineComponent::TransitionToState(UMerinoState* TransitionSta
 	ActiveState = TransitionState;
 	ActiveState->EnterState();
 	OnActiveStateChanged.Broadcast(ActiveState->GetStateID());
+}
+
+UMerinoState* UMerinoStateMachineComponent::GetState(EMerinoStateID StateID)
+{
+	if (bStatesInitialized == false)
+	{
+		UMerinoLogStatics::LogError(TEXT("Error: Trying to retrive {0} when states have not been initialized."), { UEnum::GetValueAsString(StateID) });
+		return nullptr;
+	}
+
+	if (States.Contains(StateID) == false)
+	{
+		UMerinoLogStatics::LogError(TEXT("Error: Unable to locate state {0}"), { UEnum::GetValueAsString(StateID) });
+		return nullptr;
+	}
+
+	return States[StateID];
 }
 
 

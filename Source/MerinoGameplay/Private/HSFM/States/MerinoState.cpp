@@ -16,6 +16,11 @@ void UMerinoState::AddTransition(UTransition* InTransition)
 	Transitions.Add(InTransition);
 }
 
+TArray<TObjectPtr<UTransition>>* UMerinoState::GetTransitions()
+{
+	return &Transitions;
+}
+
 void UMerinoState::PostInitialise(AActor* InOwner, UMerinoStateProperties* InStateProperties)
 {
 }

@@ -18,7 +18,7 @@ class MERINOGAMEPLAY_API UTransitionData : public UDataAsset
 
 public:
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<UTransitionRule> TransitionRule;
+	TArray<TSubclassOf<UTransitionRule>> TransitionRules;
 	UPROPERTY(EditAnywhere)
 	TEnumAsByte<EMerinoStateID> TransitionStateID;
 };

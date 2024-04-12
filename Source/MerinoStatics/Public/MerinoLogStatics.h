@@ -12,5 +12,6 @@ class MERINOSTATICS_API UMerinoLogStatics : public UObject
 public:
 	static void LogVector(FString LogIdentifier, FVector VectorToLog);
 	static void LogFloat(FString LogIdentifier, float FloatToLog);
-	static void LogError(const TCHAR* InErrorString, const FStringFormatOrderedArguments& InErrorMessageArgs);
+	static void LogMessage(const TCHAR* InString, const FStringFormatOrderedArguments& InMessageArgs = {});
+	static void LogError(const TCHAR* InErrorString, const FStringFormatOrderedArguments& InErrorMessageArgs = {});
 };

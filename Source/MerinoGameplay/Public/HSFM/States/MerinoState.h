@@ -23,6 +23,7 @@ class MERINOGAMEPLAY_API UMerinoState : public UObject
 public:
 	void Initialize(EMerinoStateID InStateID, AActor* InOwner, UWorld* InWorld, UMerinoStateProperties* InStateProperties);
 	void AddTransition(UTransition* InTransition);
+	TArray<TObjectPtr<UTransition>>* GetTransitions();
 	virtual void TickState(float DeltaTime);
 	virtual void ExitState();
 	virtual void EnterState();

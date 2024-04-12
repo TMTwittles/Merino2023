@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "HSFM/States/MerinoState.h"
+#include "HSFM/States/MovementState.h"
 #include "FallingState.generated.h"
 
 class UMerinoMovementComponent;
@@ -11,14 +11,10 @@ class UMerinoMovementComponent;
  * 
  */
 UCLASS()
-class MERINOGAMEPLAY_API UFallingState : public UMerinoState
+class MERINOGAMEPLAY_API UFallingState : public UMovementState
 {
 	GENERATED_BODY()
 
 public:
 	virtual void TickState(float DeltaTime);
-	
-private:
-	UPROPERTY()
-	TObjectPtr<UMerinoMovementComponent> MovementComponent;
 };

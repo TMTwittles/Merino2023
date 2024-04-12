@@ -10,6 +10,7 @@ ADynamicMovingCamera::ADynamicMovingCamera()
 	PrimaryActorTick.bCanEverTick = true;
 	CameraMovementComponent = CreateDefaultSubobject<UCameraMovementComponent>("Movement");
 	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
+	SetRootComponent(Camera);
 }
 
 // Called when the game starts or when spawned

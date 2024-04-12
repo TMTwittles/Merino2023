@@ -4,6 +4,18 @@
 
 void UFallingState::TickState(float DeltaTime)
 {
-
+	//FVector InputVector = MovementComponent->ConsumeInputVector();
+	//if (InputVector != FVector::Zero())
+	//{
+		//FVector InputVectorNormalized = InputVector.GetSafeNormal();
+		//MovementComponent->TickAcceleration(InputVectorNormalized);
+		//MovementComponent->TickRotateToVector(DeltaTime, InputVectorNormalized);
+	//}
+	//else
+	//{
+		//MovementComponent->TickDeceleration(DeltaTime);
+	//}
+	//MovementComponent->TickGravity();
+	//MovementComponent->Update();
 }
 

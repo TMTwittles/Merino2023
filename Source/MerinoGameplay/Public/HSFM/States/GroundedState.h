@@ -5,7 +5,6 @@
 #include "MovementState.h"
 #include "GroundedState.generated.h"
 
-class UMerinoMovementComponent;
 /**
  * 
  */
@@ -16,4 +15,5 @@ class MERINOGAMEPLAY_API UGroundedState : public UMovementState
 	
 public:
 	virtual void TickState(float DeltaTime) override;
+	virtual void EnterState();
 };

@@ -14,8 +14,11 @@ public:
 	virtual void BeginPlay() override;
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	const bool CharacterGrounded();
-	void TickRotateToVector(const float DeltaTime, FVector TargetVector);
+	void StickToGround();
+	void ApplyImpulseForce(const float ImpulseForce, const FVector Direction);
+	void TickRotateToVector(const float DeltaTime, const FVector TargetVector);
 	void TickAcceleration(const FVector Direction, const float InputAmountNormalized = 1.0f);
+	void TickGravity();
 	void TickDeceleration(const float DeltaTime);
 	void Update();
 

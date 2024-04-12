@@ -4,7 +4,7 @@
 
 void UGroundedState::TickState(float DeltaTime)
 {
-	FVector InputVector = MovementComponent->ConsumeInputVector();
+	/*FVector InputVector = MovementComponent->ConsumeInputVector();
 	if (InputVector != FVector::Zero())
 	{
 		FVector InputVectorNormalized = InputVector.GetSafeNormal();
@@ -15,5 +15,11 @@ void UGroundedState::TickState(float DeltaTime)
 	{
 		MovementComponent->TickDeceleration(DeltaTime);
 	}
-	MovementComponent->Update();
+	MovementComponent->Update();*/
+}
+
+void UGroundedState::EnterState()
+{
+	/*Super::EnterState();
+	MovementComponent->StickToGround();*/
 }

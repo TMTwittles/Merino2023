@@ -25,20 +25,27 @@ public:
 	UMerinoStateMachineComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	void TransitionToState(UMerinoState* TransitionState);
+	UFUNCTION(BlueprintCallable)
+	UMerinoState* GetState(EMerinoStateID StateID);
 
-	// Events
-	UPROPERTY(BlueprintAssignable)
-	FOnStatesInitialized OnStatesInitialized;
-	UPROPERTY(BlueprintAssignable)
-	FOnActiveStateChanged OnActiveStateChanged;
-	
+
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	void ConstructStates();
+	void SetStatesInitialized();
+
+public:
+	// Events
+	UPROPERTY(BlueprintAssignable)
+	FOnStatesInitialized OnStatesInitialized;
+	UPROPERTY(BlueprintAssignable)
+	FOnActiveStateChanged OnActiveStateChanged;
 
 private:
+	UPROPERTY()
+	bool bStatesInitialized = false;
 	UPROPERTY(EditAnywhere, Category = "State data", meta = (AllowPrivateAccess = "True"))
 	TObjectPtr<UDataTable> GlobalStateProperties;
 	UPROPERTY(EditAnywhere, Category = "State data", meta=(AllowPrivateAccess="True"))
