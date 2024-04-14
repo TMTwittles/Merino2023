@@ -15,7 +15,7 @@ const bool UMerinoMovementComponent::CharacterGrounded()
 	FHitResult HitResult;
 	FVector LineTraceStart = GetOwner()->GetActorLocation();
 	FVector LineTraceEnd = LineTraceStart - GetOwner()->GetActorUpVector() * CheckGroundLineTraceDistance;
-	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, LineTraceStart, LineTraceEnd, ECC_);
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, LineTraceStart, LineTraceEnd, ECC_WorldStatic);
 	return bHit;
 }
 

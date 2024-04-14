@@ -23,6 +23,8 @@ AMerinoCharacter::AMerinoCharacter()
 
 	// Build actor components
 	CharacterMovementComponent = CreateDefaultSubobject<UCharacterMovementComponent>("Character movement component");
+	CharacterMovementComponent->SetComponentTickEnabled(true);
+	CharacterMovementComponent->PrimaryComponentTick.bCanEverTick = true;
 	Movement = CreateDefaultSubobject<UMerinoMovementComponent>("MovementComponent");
 	FootIKSolver = CreateDefaultSubobject<UFootIKSolverComponent>("FootIKSolverComponent");
 	RegisteredActionsComponent = CreateDefaultSubobject<URegisteredActionsComponent>("RegisteredActionComponent");
